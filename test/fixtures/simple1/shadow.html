@@ -1,21 +1,24 @@
-<div class="container"></div>
-<script>
-  class FancyButton extends HTMLElement {
-    constructor() {
-      super()
-      const shadowRoot = this.attachShadow({mode: 'open'})
-      shadowRoot.innerHTML = `
-        <span class="text">
-          Hello
-        </span>`
-    }
+<body>
+    <div class="container"></div>
+    <span class="red-herring">Fooled you?</span>
+    <script>
+      class FancyComponent extends HTMLElement {
+        constructor() {
+          super()
+          const shadowRoot = this.attachShadow({mode: 'open'})
+          shadowRoot.innerHTML = `
+            <span class="text">
+              Hello
+            </span>`
+        }
 
-    connectedCallback() {
-      this.setAttribute('class', 'button')
-    }
-  }
+        connectedCallback() {
+          this.setAttribute('class', 'component')
+        }
+      }
 
-  customElements.define('fancy-button', FancyButton)
+      customElements.define('fancy-component', FancyComponent)
 
-  document.querySelector('.container').appendChild(new FancyButton())
-</script>
+      document.querySelector('.container').appendChild(new FancyComponent())
+    </script>
+</body>

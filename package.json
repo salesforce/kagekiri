@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "karma start --single-run"
+    "test": "karma start --single-run",
+    "test:debug": "karma start --browsers=Chrome --single-run=false"
   },
   "keywords": [],
   "author": "",
