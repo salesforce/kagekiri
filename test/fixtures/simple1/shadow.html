@@ -1,0 +1,21 @@
+<div class="container"></div>
+<script>
+  class FancyButton extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `
+        <span class="text">
+          Hello
+        </span>`
+    }
+
+    connectedCallback() {
+      this.setAttribute('class', 'button')
+    }
+  }
+
+  customElements.define('fancy-button', FancyButton)
+
+  document.querySelector('.container').appendChild(new FancyButton())
+</script>
