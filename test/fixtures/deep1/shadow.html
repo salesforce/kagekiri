@@ -1,0 +1,42 @@
+<body>
+<div class="container"></div>
+<span class="red-herring">Fooled you?</span>
+<script>
+  class FancyComponent extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `
+            <div class="wrapper">
+              <span class="red-herring">Fooled you?</span>
+            </div>`
+    }
+
+    connectedCallback() {
+      this.setAttribute('class', 'component')
+      this.shadowRoot.querySelector('.wrapper').appendChild(new OtherFancyComponent())
+    }
+  }
+
+  class OtherFancyComponent extends HTMLElement {
+    constructor () {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `
+          <span class="text">
+            Hello
+          </span>
+          `
+    }
+
+    connectedCallback() {
+      this.setAttribute('class', 'other-component')
+    }
+  }
+
+  customElements.define('fancy-component', FancyComponent)
+  customElements.define('other-fancy-component', OtherFancyComponent)
+
+  document.querySelector('.container').appendChild(new FancyComponent())
+</script>
+</body>

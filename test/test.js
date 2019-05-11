@@ -2,6 +2,8 @@ import {querySelectorAll, querySelector} from '../index.js'
 import * as assert from 'assert'
 import simpleLight1 from './fixtures/simple1/light.html'
 import simpleShadow1 from './fixtures/simple1/shadow.html'
+import deepLight1 from './fixtures/deep1/light.html'
+import deepShadow1 from './fixtures/deep1/shadow.html'
 
 function withDom(html, cb) {
   const iframe = document.createElement('iframe')
@@ -18,6 +20,9 @@ function withDom(html, cb) {
 }
 
 function simplifyElement(element) {
+  if (!element) {
+    return undefined
+  }
   return {
     tagName: element.tagName,
     classList: [...element.classList]
@@ -99,6 +104,37 @@ describe('basic test suite', function () {
       {
         selector: '.container span',
         expected
+      },
+      {
+        selector: '.fake span.text',
+        expected: []
+      }
+    ])
+  })
+
+  describe('deepShadow1', () => {
+    const expected = [
+      {
+        tagName: 'SPAN',
+        classList: ['text']
+      }
+    ]
+    testSelectors(deepLight1, deepShadow1, [
+      {
+        selector: '.container .component .other-component span',
+        expected
+      },
+      {
+        selector: '.other-component span',
+        expected
+      },
+      {
+        selector: 'span.text',
+        expected
+      },
+      {
+        selector: '.fake span.text',
+        expected: []
       }
     ])
   })
