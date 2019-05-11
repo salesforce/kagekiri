@@ -110,7 +110,23 @@ describe('basic test suite', function () {
       {
         selector: '.fake span.text',
         expected: []
-      }
+      },
+      {
+        selector: '.component > .text',
+        expected
+      },
+      {
+        selector: '.container .component > .text',
+        expected
+      },
+      {
+        selector: '.container > .component > .text',
+        expected
+      },
+      {
+        selector: 'body .container > .component > .text',
+        expected
+      },
     ])
   })
 
