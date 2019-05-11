@@ -67,6 +67,16 @@ function matches(element, ast) {
       if (element.tagName.toLowerCase() !== node.value.toLowerCase()) {
         return false
       }
+    } else if (node.type === 'attribute') {
+      if (node.value) { // e.g. [data-foo="bar"]
+        if (element.getAttribute(node.attribute) !== node.value) {
+          return false
+        }
+      } else { // e.g. [data-foo]
+        if (!element.hasAttribute(node.attribute) ) {
+          return false
+        }
+      }
     } else if (node.type === 'combinator') {
       if (node.value === ' ') {
         // walk all ancestors

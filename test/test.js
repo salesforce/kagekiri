@@ -4,6 +4,8 @@ import simpleLight1 from './fixtures/simple1/light.html'
 import simpleShadow1 from './fixtures/simple1/shadow.html'
 import deepLight1 from './fixtures/deep1/light.html'
 import deepShadow1 from './fixtures/deep1/shadow.html'
+import attributeLight1 from './fixtures/attribute1/light.html'
+import attributeShadow1 from './fixtures/attribute1/shadow.html'
 
 function withDom(html, cb) {
   const iframe = document.createElement('iframe')
@@ -134,6 +136,33 @@ describe('basic test suite', function () {
       },
       {
         selector: '.fake span.text',
+        expected: []
+      }
+    ])
+  })
+
+  describe('attribute selectors', () => {
+    const expected = [
+      {
+        tagName: 'SPAN',
+        classList: ['text']
+      }
+    ]
+    testSelectors(attributeLight1, attributeShadow1, [
+      {
+        selector: '[data-foo]',
+        expected
+      },
+      {
+        selector: '[data-foo="bar"]',
+        expected
+      },
+      {
+        selector: '[data-fake]',
+        expected: []
+      },
+      {
+        selector: '[data-foo="fake"]',
         expected: []
       }
     ])
