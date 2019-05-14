@@ -18,7 +18,6 @@ const elements = querySelectorAll('.container button')
 const element = querySelector('.container button')
 
 // or a specific element
-
 const elements = querySelectorAll('button', otherElement)
 const element = querySelector('button', otherElement)
 ```
