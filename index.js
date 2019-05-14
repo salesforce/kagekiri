@@ -55,6 +55,16 @@ function getFirstMatchingAncestor(element, nodes) {
   }
 }
 
+function getFirstMatchingPreviousSibling(element, nodes) {
+  let sibling = element.previousElementSibling
+  while (sibling) {
+    if (matches(sibling, { nodes })) {
+      return sibling
+    }
+    sibling = sibling.previousElementSibling
+  }
+}
+
 function matches(element, ast) {
   let { nodes } = ast
   for (let i = nodes.length - 1; i >= 0; i--) {
@@ -80,23 +90,41 @@ function matches(element, ast) {
     } else if (node.type === 'combinator') {
       if (node.value === ' ') {
         // walk all ancestors
-        const ancestorNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
-        const ancestor = getFirstMatchingAncestor(element, ancestorNodes)
+        const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
+        const ancestor = getFirstMatchingAncestor(element, precedingNodes)
         if (!ancestor) {
           return false
         } else {
           element = ancestor
-          i -= ancestorNodes.length
+          i -= precedingNodes.length
         }
       } else if (node.value === '>') {
         // walk immediate parent only
-        const ancestorNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
+        const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
         const ancestor = getParentIgnoringShadow(element)
-        if (!ancestor || !matches(ancestor, { nodes: ancestorNodes }) ) {
+        if (!ancestor || !matches(ancestor, { nodes: precedingNodes }) ) {
           return false
         } else {
           element = ancestor
           i -= 1
+        }
+      } else if (node.value === '+') {
+        // walk immediate sibling only
+        const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
+        const sibling = element.previousElementSibling
+        if (!sibling || !matches(sibling, { nodes: precedingNodes })) {
+          return false
+        } else {
+          i -= precedingNodes.length
+        }
+      } else if (node.value === '~') {
+        // walk all previous siblings
+        const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
+        const sibling = getFirstMatchingPreviousSibling(element, precedingNodes)
+        if (!sibling) {
+          return false
+        } else {
+          i -= precedingNodes.length
         }
       }
     }
