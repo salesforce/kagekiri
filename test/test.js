@@ -367,4 +367,43 @@ describe('basic test suite', function () {
       }
     ])
   })
+
+  describe('pseudo selectors', () => {
+    const center = [
+      {
+        tagName: 'SPAN',
+        classList: ['center']
+      }
+    ]
+    const right = [
+      {
+        tagName: 'SPAN',
+        classList: ['right']
+      }
+    ]
+    const farRight = [
+      {
+        tagName: 'SPAN',
+        classList: ['far-right']
+      }
+    ]
+    testSelectors(siblingLight1, siblingShadow1, [
+      {
+        selector: 'span:nth-child(3)',
+        expected: center
+      },
+      {
+        selector: 'span.far-right,\nspan:nth-child(3)',
+        expected: [...center, ...farRight]
+      },
+      {
+        selector: 'span.far-right:not(.red-herring),\nspan:nth-child(3)',
+        expected: [...center, ...farRight]
+      },
+      {
+        selector: 'span.far-right:not(.red-herring),\nspan:nth-child(3)\n,span:nth-child(4)',
+        expected: [...center, ...right, ...farRight]
+      }
+    ])
+  })
 })

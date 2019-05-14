@@ -1,5 +1,4 @@
 import postcssSelectorParser from 'postcss-selector-parser'
-const parser = postcssSelectorParser()
 
 function addAll (arr1, arr2) {
   for (let item of arr2) {
@@ -87,12 +86,11 @@ function matches (element, ast) {
           return false
         }
       }
-    } else if (node.type === 'pseudo' && node.value === ':not') {
-      // not sure why a :not() can have multiple nodes here, but let's test them all
-      for (let subNode of node.nodes) {
-        if (matches(element, subNode)) {
-          return false
-        }
+    } else if (node.type === 'pseudo') {
+      // For pseudos, just use the native element matcher.
+      // `sourceCode` comes from `attachSourceToPseudos()`
+      if (!element.matches(node.sourceCode)) {
+        return false
       }
     } else if (node.type === 'combinator') {
       if (node.value === ' ') {
@@ -151,16 +149,39 @@ function getMatchingElements (elements, ast) {
   return results
 }
 
+// For convenience, attach the source to all pseudo selectors.
+// We need this later, and it's easier than passing the selector into every function.
+function attachSourceToPseudos ({ nodes }, selector) {
+  const splitSelector = selector.split('\n')
+  for (let node of nodes) {
+    if (node.type === 'pseudo') {
+      let sourceCode
+      const { start, end } = node.source
+      if (start.line === end.line) {
+        const line = splitSelector[start.line - 1]
+        sourceCode = line.substring(start.column, end.column)
+      } else {
+        const startLine = splitSelector[start.line - 1]
+        const endLine = splitSelector[end.line - 1]
+        sourceCode = startLine.substring(start.column) + endLine.substring(0, end.column)
+      }
+      node.sourceCode = ':' + sourceCode
+    }
+    if (node.nodes) {
+      attachSourceToPseudos(node, selector)
+    }
+  }
+}
+
 function querySelector (selector, context = document) {
   return querySelectorAll(selector, context)[0]
 }
 
 function querySelectorAll (selector, context = document) {
-  const ast = parser.astSync(selector)
-  // TODO: optimization: don't get all elements, only the ones that match the last relevant selector,
-  // e.g. for "foo bar baz" just search for "baz"
-  const elements = getAllElements(context)
+  const ast = postcssSelectorParser().astSync(selector)
+  attachSourceToPseudos(ast, selector)
 
+  const elements = getAllElements(context)
   return getMatchingElements(elements, ast)
 }
 
