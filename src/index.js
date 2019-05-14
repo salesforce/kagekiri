@@ -68,7 +68,11 @@ function matches (element, ast) {
   let { nodes } = ast
   for (let i = nodes.length - 1; i >= 0; i--) {
     let node = nodes[i]
-    if (node.type === 'class') {
+    if (node.type === 'id') {
+      if (element.id !== node.value) {
+        return false
+      }
+    } else if (node.type === 'class') {
       if (!element.classList.contains(node.value)) {
         return false
       }

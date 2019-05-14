@@ -10,6 +10,8 @@ import attributeLight1 from './fixtures/attribute1/light.html'
 import attributeShadow1 from './fixtures/attribute1/shadow.html'
 import siblingLight1 from './fixtures/sibling1/light.html'
 import siblingShadow1 from './fixtures/sibling1/shadow.html'
+import idLight1 from './fixtures/id1/light.html'
+import idShadow1 from './fixtures/id1/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -403,6 +405,33 @@ describe('basic test suite', function () {
       {
         selector: 'span.far-right:not(.red-herring),\nspan:nth-child(3)\n,span:nth-child(4)',
         expected: [...center, ...right, ...farRight]
+      }
+    ])
+  })
+
+  describe('id selector', () => {
+    const text = [
+      {
+        tagName: 'SPAN',
+        classList: ['text']
+      }
+    ]
+    testSelectors(idLight1, idShadow1, [
+      {
+        selector: '#myId',
+        expected: text
+      },
+      {
+        selector: '#fake',
+        expected: []
+      },
+      {
+        selector: '.component #myId',
+        expected: text
+      },
+      {
+        selector: '.fake #myId',
+        expected: []
       }
     ])
   })
