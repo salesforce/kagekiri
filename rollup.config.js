@@ -35,8 +35,10 @@ function config (file, format, opts = {}) {
 }
 
 export default [
-  config('dist/kagekiri.js', 'umd'),
-  config('dist/kagekiri.min.js', 'umd', { plugins: [terser()] }),
+  config('dist/kagekiri.umd.js', 'umd'),
+  config('dist/kagekiri.umd.min.js', 'umd', { plugins: [terser()] }),
   config('dist/kagekiri.cjs.js', 'cjs', { external: deps }),
-  config('dist/kagekiri.es.js', 'es', { external: deps })
+  config('dist/kagekiri.es.js', 'es', { external: deps }),
+  config('dist/kagekiri.iife.js', 'iife'),
+  config('dist/kagekiri.iife.min.js', 'iife', { plugins: [terser()] })
 ]
