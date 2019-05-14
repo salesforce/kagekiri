@@ -83,7 +83,14 @@ function matches(element, ast) {
           return false
         }
       } else { // e.g. [data-foo]
-        if (!element.hasAttribute(node.attribute) ) {
+        if (!element.hasAttribute(node.attribute)) {
+          return false
+        }
+      }
+    } else if (node.type === 'pseudo' && node.value === ':not') {
+      // not sure why a :not() can have multiple nodes here, but let's test them all
+      for (let subNode of node.nodes) {
+        if (matches(element, subNode)) {
           return false
         }
       }

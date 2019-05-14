@@ -331,4 +331,39 @@ describe('basic test suite', function () {
     ])
   })
 
+  describe(':not() selectors', () => {
+    const text = [
+      {
+        tagName: 'SPAN',
+        classList: ['text']
+      }
+    ]
+    testSelectors(simpleLight1, simpleShadow1, [
+      {
+        selector: 'span:not(.red-herring)',
+        expected: text
+      },
+      {
+        selector: 'span:not(.red-herring):not(.fake)',
+        expected: text
+      },
+      {
+        selector: 'span:not(.red-herring):not(.red-herring)',
+        expected: text
+      },
+      {
+        selector: '.text:not(.red-herring)',
+        expected: text
+      },
+      {
+        selector: '.text:not(.red-herring):not(.red-herring)',
+        expected: text
+      },
+      {
+        selector: 'span:not(.red-herring):not(.text)',
+        expected: []
+      }
+    ])
+  })
+
 })
