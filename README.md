@@ -23,6 +23,13 @@ const elements = querySelectorAll('button', otherElement)
 const element = querySelector('button', otherElement)
 ```
 
+Build
+---
+
+```sh
+npm run build
+```
+
 Test
 ---
 
@@ -34,4 +41,16 @@ Debug:
 
 ```sh
 npm run test:debug
+```
+
+Lint:
+
+```sh
+npm run lint
+```
+
+Fix most lint issues:
+
+```sh
+npm run lint:fix
 ```

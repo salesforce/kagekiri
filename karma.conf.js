@@ -1,4 +1,4 @@
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     files: [
       'test/test.js'
@@ -7,9 +7,9 @@ module.exports = function(config) {
     frameworks: ['mocha'],
 
     plugins: [
-      require("karma-rollup-preprocessor"),
-      require("karma-mocha"),
-      require("karma-chrome-launcher")
+      require('karma-rollup-preprocessor'),
+      require('karma-mocha'),
+      require('karma-chrome-launcher')
     ],
 
     preprocessors: {
@@ -18,18 +18,18 @@ module.exports = function(config) {
 
     rollupPreprocessor: {
       plugins: [
-        require("rollup-plugin-node-resolve")({ preferBuiltins: true }),
-        require("rollup-plugin-commonjs")(),
-        require("rollup-plugin-node-builtins")(),
-        require("rollup-plugin-node-globals")(),
+        require('rollup-plugin-node-resolve')({ preferBuiltins: true }),
+        require('rollup-plugin-commonjs')(),
+        require('rollup-plugin-node-builtins')(),
+        require('rollup-plugin-node-globals')(),
         require('rollup-plugin-string').string({
           include: '**/*.html'
         })
       ],
       output: {
-        format: "iife", // Helps prevent naming collisions.
-        name: "Test", // Required for 'iife' format.
-        sourcemap: "inline" // Sensible for testing.
+        format: 'iife', // Helps prevent naming collisions.
+        name: 'Test', // Required for 'iife' format.
+        sourcemap: 'inline' // Sensible for testing.
       }
     },
 
@@ -37,5 +37,5 @@ module.exports = function(config) {
       'ChromeHeadless'
     ]
 
-  });
-};
+  })
+}

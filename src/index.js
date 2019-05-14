@@ -1,13 +1,13 @@
-import postcssSelectorParser from "postcss-selector-parser"
+import postcssSelectorParser from 'postcss-selector-parser'
 const parser = postcssSelectorParser()
 
-function addAll(arr1, arr2) {
+function addAll (arr1, arr2) {
   for (let item of arr2) {
     arr1.push(item)
   }
 }
 
-function getAllElements(context) {
+function getAllElements (context) {
   const results = []
 
   // create the results list in depth-first order
@@ -22,7 +22,7 @@ function getAllElements(context) {
 
 // given a list of ast nodes, find the final list and stop when hitting
 // a combinator. for instance "div span > button span strong.foo" should return "strong.foo"
-function getLastNonCombinatorNodes(nodes) {
+function getLastNonCombinatorNodes (nodes) {
   let results = []
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i]
@@ -34,7 +34,7 @@ function getLastNonCombinatorNodes(nodes) {
   return results.reverse()
 }
 
-function getParentIgnoringShadow(element) {
+function getParentIgnoringShadow (element) {
   if (element.parentElement) {
     return element.parentElement
   }
@@ -44,7 +44,7 @@ function getParentIgnoringShadow(element) {
   }
 }
 
-function getFirstMatchingAncestor(element, nodes) {
+function getFirstMatchingAncestor (element, nodes) {
   let ancestor = getParentIgnoringShadow(element)
   while (ancestor) {
     if (matches(ancestor, { nodes })) {
@@ -55,7 +55,7 @@ function getFirstMatchingAncestor(element, nodes) {
   }
 }
 
-function getFirstMatchingPreviousSibling(element, nodes) {
+function getFirstMatchingPreviousSibling (element, nodes) {
   let sibling = element.previousElementSibling
   while (sibling) {
     if (matches(sibling, { nodes })) {
@@ -65,7 +65,7 @@ function getFirstMatchingPreviousSibling(element, nodes) {
   }
 }
 
-function matches(element, ast) {
+function matches (element, ast) {
   let { nodes } = ast
   for (let i = nodes.length - 1; i >= 0; i--) {
     let node = nodes[i]
@@ -109,7 +109,7 @@ function matches(element, ast) {
         // walk immediate parent only
         const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
         const ancestor = getParentIgnoringShadow(element)
-        if (!ancestor || !matches(ancestor, { nodes: precedingNodes }) ) {
+        if (!ancestor || !matches(ancestor, { nodes: precedingNodes })) {
           return false
         } else {
           element = ancestor
@@ -139,7 +139,7 @@ function matches(element, ast) {
   return true
 }
 
-function getMatchingElements(elements, ast) {
+function getMatchingElements (elements, ast) {
   const results = []
   for (let element of elements) {
     for (let node of ast.nodes) { // multiple nodes here are comma-separated
@@ -155,7 +155,7 @@ function querySelector (selector, context = document) {
   return querySelectorAll(selector, context)[0]
 }
 
-function querySelectorAll(selector, context = document) {
+function querySelectorAll (selector, context = document) {
   const ast = parser.astSync(selector)
   // TODO: optimization: don't get all elements, only the ones that match the last relevant selector,
   // e.g. for "foo bar baz" just search for "baz"

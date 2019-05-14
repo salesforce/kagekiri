@@ -4,13 +4,18 @@ import builtins from 'rollup-plugin-node-builtins'
 import globals from 'rollup-plugin-node-globals'
 import buble from 'rollup-plugin-buble'
 import { terser } from 'rollup-plugin-terser'
+import pkg from './package.json'
 
-function config(output, plugins = []) {
+const deps = Object.keys(pkg.dependencies)
+
+function config (file, format, opts = {}) {
+  const plugins = opts.plugins || []
+  const external = opts.external || []
   return {
-    input: './index.js',
+    input: './src/index.js',
     output: {
-      file: output,
-      format: 'iife',
+      file,
+      format,
       name: 'kagekiri'
     },
     plugins: [
@@ -24,11 +29,14 @@ function config(output, plugins = []) {
         }
       }),
       ...plugins
-    ]
+    ],
+    external
   }
 }
 
 export default [
-  config('dist/kagekiri.js'),
-  config('dist/kagekiri.min.js', [terser()])
+  config('dist/kagekiri.js', 'umd'),
+  config('dist/kagekiri.min.js', 'umd', { plugins: [terser()] }),
+  config('dist/kagekiri.cjs.js', 'cjs', { external: deps }),
+  config('dist/kagekiri.es.js', 'es', { external: deps })
 ]

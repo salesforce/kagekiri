@@ -1,4 +1,6 @@
-import {querySelectorAll, querySelector} from '../index.js'
+/* global it describe */
+
+import { querySelectorAll, querySelector } from '../src/index.js'
 import * as assert from 'assert'
 import simpleLight1 from './fixtures/simple1/light.html'
 import simpleShadow1 from './fixtures/simple1/shadow.html'
@@ -9,7 +11,7 @@ import attributeShadow1 from './fixtures/attribute1/shadow.html'
 import siblingLight1 from './fixtures/sibling1/light.html'
 import siblingShadow1 from './fixtures/sibling1/shadow.html'
 
-function withDom(html, cb) {
+function withDom (html, cb) {
   const iframe = document.createElement('iframe')
   document.body.appendChild(iframe)
   const iframeDocument = iframe.contentWindow.document
@@ -23,7 +25,7 @@ function withDom(html, cb) {
   }
 }
 
-function simplifyElement(element) {
+function simplifyElement (element) {
   if (!element) {
     return undefined
   }
@@ -33,18 +35,18 @@ function simplifyElement(element) {
   }
 }
 
-function simplifyElements(elements) {
+function simplifyElements (elements) {
   return [...elements].map(simplifyElement)
 }
 
-function stringify(obj) {
+function stringify (obj) {
   if (typeof obj === 'undefined') {
     return obj
   }
   return JSON.stringify(obj)
 }
 
-function assertSelectorEqual(selector, actual, expected, qsa) {
+function assertSelectorEqual (selector, actual, expected, qsa) {
   if (qsa) {
     actual = simplifyElements(actual)
   } else {
@@ -55,7 +57,7 @@ function assertSelectorEqual(selector, actual, expected, qsa) {
     `Selector failed: ${stringify(selector)}, ${stringify(actual)} !== ${stringify(expected)}`)
 }
 
-function testSelectors(lightDom, shadowDom, tests) {
+function testSelectors (lightDom, shadowDom, tests) {
   tests.forEach(({ selector, expected }) => {
     it('light DOM - qSA', () => {
       withDom(lightDom, context => {
@@ -142,7 +144,7 @@ describe('basic test suite', function () {
       {
         selector: 'body .container > .component > .text',
         expected
-      },
+      }
     ])
   })
 
@@ -219,7 +221,7 @@ describe('basic test suite', function () {
         classList: ['far-right']
       }
     ]
-    testSelectors(siblingLight1, siblingLight1, [
+    testSelectors(siblingLight1, siblingShadow1, [
       {
         selector: '.left + .center',
         expected: center
@@ -365,5 +367,4 @@ describe('basic test suite', function () {
       }
     ])
   })
-
 })
