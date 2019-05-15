@@ -1,0 +1,34 @@
+<div class="container"></div>
+<script>
+  class FancyComponent extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `
+        <div class="inside-component">
+            <slot name="slot1"></slot>
+            <slot name="slot2"></slot>
+        </div>`
+    }
+
+    connectedCallback() {
+      this.setAttribute('class', 'component')
+    }
+  }
+
+  customElements.define('fancy-component', FancyComponent)
+
+  document.querySelector('.container').innerHTML = `
+    <fancy-component>
+      <div class="text-wrapper" slot="slot1">
+        <span class="text hello">
+            Hello
+        </span>
+      </div>
+      <div class="text-wrapper" slot="slot2">
+        <span class="text world">
+            World
+        </span>
+      </div>
+    </fancy-component>`
+</script>

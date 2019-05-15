@@ -1,3 +1,5 @@
+/* global HTMLSlotElement */
+
 import postcssSelectorParser from 'postcss-selector-parser'
 
 function addAll (arr1, arr2) {
@@ -9,14 +11,23 @@ function addAll (arr1, arr2) {
 function getAllElements (context) {
   const results = []
 
+  const hasSlotElement = typeof HTMLSlotElement !== 'undefined'
+
   const walk = function (node) {
     // create the results list in depth-first order
     if (node.shadowRoot) {
       addAll(results, getAllElements(node.shadowRoot))
     }
-    for (let child of node.children) {
-      results.push(child)
-      walk(child)
+    if (hasSlotElement && node instanceof HTMLSlotElement) {
+      for (let child of node.assignedElements()) {
+        results.push(child)
+        walk(child)
+      }
+    } else {
+      for (let child of node.children) {
+        results.push(child)
+        walk(child)
+      }
     }
   }
 
@@ -40,9 +51,14 @@ function getLastNonCombinatorNodes (nodes) {
 }
 
 function getParentIgnoringShadow (element) {
+  // if an element is slotted, ignore the "real" parent and use the shadow DOM parent
+  if (element.assignedSlot) {
+    return element.assignedSlot.parentElement
+  }
   if (element.parentElement) {
     return element.parentElement
   }
+  // if an element is inside the shadow DOM, break outside of it
   const rootNode = element.getRootNode()
   if (rootNode !== document) {
     return rootNode.host

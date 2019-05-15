@@ -14,6 +14,10 @@ import idLight1 from './fixtures/id1/light.html'
 import idShadow1 from './fixtures/id1/shadow.html'
 import orderingLight1 from './fixtures/ordering1/light.html'
 import orderingShadow1 from './fixtures/ordering1/shadow.html'
+import slotsLight1 from './fixtures/slots1/light.html'
+import slotsShadow1 from './fixtures/slots1/shadow.html'
+import slotsLight2 from './fixtures/slots2/light.html'
+import slotsShadow2 from './fixtures/slots2/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -476,6 +480,72 @@ describe('basic test suite', function () {
       {
         selector: '.target:last-child',
         expected: lastChildren
+      }
+    ])
+  })
+
+  describe('slots 1', () => {
+    const text = [
+      {
+        tagName: 'SPAN',
+        classList: ['text']
+      }
+    ]
+    testSelectors(slotsLight1, slotsShadow1, [
+      {
+        selector: '.component .inside-component .text',
+        expected: text
+      },
+      {
+        selector: '.component > .text',
+        expected: []
+      },
+      {
+        selector: '.container .inside-component .text',
+        expected: text
+      },
+      {
+        selector: '.text',
+        expected: text
+      },
+      {
+        selector: '.inside-component > .text-wrapper > .text',
+        expected: text
+      }
+    ])
+  })
+
+  describe('slots 2', () => {
+    const text = [
+      {
+        tagName: 'SPAN',
+        classList: ['text', 'hello']
+      },
+      {
+        tagName: 'SPAN',
+        classList: ['text', 'world']
+      }
+    ]
+    testSelectors(slotsLight2, slotsShadow2, [
+      {
+        selector: '.component .inside-component .text',
+        expected: text
+      },
+      {
+        selector: '.component > .text',
+        expected: []
+      },
+      {
+        selector: '.container .inside-component .text',
+        expected: text
+      },
+      {
+        selector: '.text',
+        expected: text
+      },
+      {
+        selector: '.inside-component > .text-wrapper > .text',
+        expected: text
       }
     ])
   })
