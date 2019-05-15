@@ -1,7 +1,7 @@
 kagekiri
 ====
 
-Shadow-piercing `querySelectorAll()` / `querySelector()` implementation.
+Shadow-piercing `querySelector()` / `querySelectorAll()` implementation.
 
 Usage
 ---
