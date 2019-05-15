@@ -574,4 +574,31 @@ describe('basic test suite', function () {
       }
     ])
   })
+
+  describe('slots are not duplicated 2', () => {
+    const wrapper = [
+      {
+        tagName: 'DIV',
+        classList: ['text-wrapper']
+      }
+    ]
+    testSelectors(slotsLight1, slotsShadow1, [
+      {
+        selector: '.text-wrapper',
+        expected: wrapper
+      },
+      {
+        selector: '.inside-component .text-wrapper',
+        expected: wrapper
+      },
+      {
+        selector: '.container .text-wrapper',
+        expected: wrapper
+      },
+      {
+        selector: 'fancy-component > .text-wrapper',
+        expected: []
+      }
+    ])
+  })
 })

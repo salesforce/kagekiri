@@ -1,26 +1,21 @@
-/* global HTMLSlotElement */
-
 import postcssSelectorParser from 'postcss-selector-parser'
 
 function getAllElements (context) {
   const results = []
 
-  const hasSlotElement = typeof HTMLSlotElement !== 'undefined'
-
   // create the results list in depth-first order
   function walk (node) {
-    if (node.shadowRoot) {
+    if (node.shadowRoot) { // shadow host
       for (let child of node.shadowRoot.children) {
         results.push(child)
         walk(child)
       }
-    }
-    if (hasSlotElement && node instanceof HTMLSlotElement) {
+    } else if (typeof node.assignedElements === 'function') { // slot
       for (let child of node.assignedElements()) {
         results.push(child)
         walk(child)
       }
-    } else {
+    } else { // regular element
       for (let child of node.children) {
         results.push(child)
         walk(child)

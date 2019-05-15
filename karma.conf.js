@@ -9,7 +9,8 @@ module.exports = function (config) {
     plugins: [
       require('karma-rollup-preprocessor'),
       require('karma-mocha'),
-      require('karma-chrome-launcher')
+      require('karma-chrome-launcher'),
+      require('karma-firefox-launcher')
     ],
 
     preprocessors: {
@@ -34,7 +35,8 @@ module.exports = function (config) {
     },
 
     browsers: [
-      'ChromeHeadless'
+      'ChromeHeadless',
+      'FirefoxHeadless'
     ]
 
   })
