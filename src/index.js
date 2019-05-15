@@ -9,13 +9,19 @@ function addAll (arr1, arr2) {
 function getAllElements (context) {
   const results = []
 
-  // create the results list in depth-first order
-  for (let element of context.querySelectorAll('*')) {
-    results.push(element)
-    if (element.shadowRoot) {
-      addAll(results, getAllElements(element.shadowRoot))
+  const walk = function (node) {
+    // create the results list in depth-first order
+    if (node.shadowRoot) {
+      addAll(results, getAllElements(node.shadowRoot))
+    }
+    for (let child of node.children) {
+      results.push(child)
+      walk(child)
     }
   }
+
+  walk(context)
+
   return results
 }
 
