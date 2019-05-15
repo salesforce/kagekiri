@@ -2,21 +2,18 @@
 
 import postcssSelectorParser from 'postcss-selector-parser'
 
-function addAll (arr1, arr2) {
-  for (let item of arr2) {
-    arr1.push(item)
-  }
-}
-
 function getAllElements (context) {
   const results = []
 
   const hasSlotElement = typeof HTMLSlotElement !== 'undefined'
 
-  const walk = function (node) {
-    // create the results list in depth-first order
+  // create the results list in depth-first order
+  function walk (node) {
     if (node.shadowRoot) {
-      addAll(results, getAllElements(node.shadowRoot))
+      for (let child of node.shadowRoot.children) {
+        results.push(child)
+        walk(child)
+      }
     }
     if (hasSlotElement && node instanceof HTMLSlotElement) {
       for (let child of node.assignedElements()) {
