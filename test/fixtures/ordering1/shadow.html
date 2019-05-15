@@ -1,0 +1,40 @@
+<div class="outer1">
+    <div class="target a"></div>
+    <div class="outer2">
+        <div class="target b"></div>
+        <!-- fancy component goes here -->
+        <div class="target e"></div>
+        <div class="outer4">
+            <div class="target f"></div>
+        </div>
+        <div class="target g"></div>
+    </div>
+    <div class="target h"></div>
+    <div class="outer5">
+        <div class="target i">
+            <div class="target j"></div>
+        </div>
+    </div>
+    <div class="target k"></div>
+</div>
+<script>
+  class FancyComponent extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `
+        <div class="outer3">
+            <div class="target c"></div>
+            <div class="target d"></div>
+        </div>`
+    }
+
+    connectedCallback() {
+      this.setAttribute('class', 'component')
+    }
+  }
+
+  customElements.define('fancy-component', FancyComponent)
+
+  document.querySelector('.outer2').insertBefore(new FancyComponent(), document.querySelector('.target.e'))
+</script>

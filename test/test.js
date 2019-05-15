@@ -12,6 +12,8 @@ import siblingLight1 from './fixtures/sibling1/light.html'
 import siblingShadow1 from './fixtures/sibling1/shadow.html'
 import idLight1 from './fixtures/id1/light.html'
 import idShadow1 from './fixtures/id1/shadow.html'
+import orderingLight1 from './fixtures/ordering1/light.html'
+import orderingShadow1 from './fixtures/ordering1/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -432,6 +434,48 @@ describe('basic test suite', function () {
       {
         selector: '.fake #myId',
         expected: []
+      }
+    ])
+  })
+
+  describe('ordering', () => {
+    const letterToElement = _ => ({ tagName: 'DIV', classList: ['target', _] })
+    const allInOrder = 'abcdefghijk'.split('').map(letterToElement)
+    const evens = 'd'.split('').map(letterToElement)
+    const odds = 'abcefghijk'.split('').map(letterToElement)
+    const firstChildren = 'abcfij'.split('').map(letterToElement)
+    const secondChildren = 'd'.split('').map(letterToElement)
+    const thirdChildren = 'eh'.split('').map(letterToElement)
+    const lastChildren = 'dfgijk'.split('').map(letterToElement)
+
+    testSelectors(orderingLight1, orderingShadow1, [
+      {
+        selector: '.target',
+        expected: allInOrder
+      },
+      {
+        selector: '.target:nth-child(even)',
+        expected: evens
+      },
+      {
+        selector: '.target:nth-child(odd)',
+        expected: odds
+      },
+      {
+        selector: '.target:nth-child(1)',
+        expected: firstChildren
+      },
+      {
+        selector: '.target:nth-child(2)',
+        expected: secondChildren
+      },
+      {
+        selector: '.target:nth-child(3)',
+        expected: thirdChildren
+      },
+      {
+        selector: '.target:last-child',
+        expected: lastChildren
       }
     ])
   })
