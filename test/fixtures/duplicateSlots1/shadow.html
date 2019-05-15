@@ -1,0 +1,18 @@
+<fancy-component class="fancy-component">
+    <button slot="title" class="button1">Button 1</button>
+    <button slot="title" class="button2">Button 2</button>
+    <button slot="title" class="button3">Button 3</button>
+</fancy-component>
+<script>
+  customElements.define('fancy-component', class extends HTMLElement {
+    constructor() {
+      super()
+      let shadowRoot = this.attachShadow({mode: 'open'});
+      shadowRoot.innerHTML = `
+      <div id="tabs">
+        <slot name="title"></slot>
+      </div>
+    `
+    }
+  })
+</script>

@@ -18,6 +18,8 @@ import slotsLight1 from './fixtures/slots1/light.html'
 import slotsShadow1 from './fixtures/slots1/shadow.html'
 import slotsLight2 from './fixtures/slots2/light.html'
 import slotsShadow2 from './fixtures/slots2/shadow.html'
+import duplicateSlotsLight1 from './fixtures/duplicateSlots1/light.html'
+import duplicateSlotsShadow1 from './fixtures/duplicateSlots1/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -546,6 +548,29 @@ describe('basic test suite', function () {
       {
         selector: '.inside-component > .text-wrapper > .text',
         expected: text
+      }
+    ])
+  })
+
+  describe('slots are not duplicated', () => {
+    const buttons = [
+      {
+        tagName: 'BUTTON',
+        classList: ['button1']
+      },
+      {
+        tagName: 'BUTTON',
+        classList: ['button2']
+      },
+      {
+        tagName: 'BUTTON',
+        classList: ['button3']
+      }
+    ]
+    testSelectors(duplicateSlotsLight1, duplicateSlotsShadow1, [
+      {
+        selector: 'button',
+        expected: buttons
       }
     ])
   })
