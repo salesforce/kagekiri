@@ -5,18 +5,18 @@ function getAllElements (context) {
 
   // create the results list in depth-first order
   function walk (node) {
+    let children
     if (node.shadowRoot) { // shadow host
-      for (let child of node.shadowRoot.children) {
-        results.push(child)
-        walk(child)
-      }
+      children = node.shadowRoot.children
     } else if (typeof node.assignedElements === 'function') { // slot
-      for (let child of node.assignedElements()) {
-        results.push(child)
-        walk(child)
-      }
+      children = node.assignedElements()
+    } else if (node.documentElement) { // document
+      children = node.documentElement.children
     } else { // regular element
-      for (let child of node.children) {
+      children = node.children
+    }
+    if (children) {
+      for (let child of children) {
         results.push(child)
         walk(child)
       }

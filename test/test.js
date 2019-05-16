@@ -601,4 +601,39 @@ describe('basic test suite', function () {
       }
     ])
   })
+
+  describe('document vs element context', () => {
+    const test = lightDom => document => {
+      const qs = lightDom
+        ? (context, selector) => context.querySelector(selector)
+        : (context, selector) => querySelector(selector, context)
+      const qsa = lightDom
+        ? (context, selector) => context.querySelectorAll(selector)
+        : (context, selector) => querySelectorAll(selector, context)
+
+      const assertElement = (actual, expected) => (
+        assert.deepStrictEqual(simplifyElement(actual), expected)
+      )
+      const assertElements = (actual, expected) => (
+        assert.deepStrictEqual(simplifyElements(actual), expected)
+      )
+
+      const text = { tagName: 'SPAN', classList: ['text'] }
+
+      assertElement(qs(document, '.text'), text)
+      assertElement(qs(qs(document, '.component'), '.text'), text)
+      assertElement(qs(qs(document, '.container'), '.text'), text)
+      assertElement(qs(qs(qs(document, 'body'), '.component'), '.text'), text)
+      assertElement(qs(qs(qs(document, 'body'), '.component'), '.fake'), undefined)
+
+      assertElements(qsa(document, '.text'), [text])
+      assertElements(qsa(qs(document, '.component'), '.text'), [text])
+      assertElements(qsa(qs(document, '.container'), '.text'), [text])
+      assertElements(qsa(qs(qs(document, 'body'), '.component'), '.text'), [text])
+      assertElements(qsa(qs(qs(document, 'body'), '.component'), '.fake'), [])
+    }
+
+    withDom(simpleLight1, test(true))
+    withDom(simpleShadow1, test(false))
+  })
 })
