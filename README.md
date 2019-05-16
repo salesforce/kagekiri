@@ -31,7 +31,7 @@ How it works
 
 `kagekiri` parses the CSS selector using [postcss-selector-parser](https://www.npmjs.com/package/postcss-selector-parser). Then it queries the entire DOM tree, traverses any `shadowRoot`s it may find, and checks the selector from children to ancestors (the same way a browser would).
 
-Note that it only works on open shadow DOM, not closed shadow DOM. Closed shadow DOMs can not be traversed.
+Note that it only works on open shadow DOM. Closed shadow DOM cannot be traversed.
 
 See the tests for full supported CSS features.
 
