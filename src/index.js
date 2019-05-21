@@ -1,37 +1,42 @@
 import postcssSelectorParser from 'postcss-selector-parser'
 
-function getAllElements (context) {
-  const results = []
+function getChildren (node) {
+  if (node.shadowRoot) { // shadow host
+    return node.shadowRoot.children
+  } else if (typeof node.assignedElements === 'function') { // slot
+    return node.assignedElements()
+  } else if (node.documentElement) { // document
+    return node.documentElement.children
+  } else { // regular element
+    return node.children
+  }
+}
 
-  // create the results list in depth-first order
-  function walk (node) {
-    let children
-    if (node.shadowRoot) { // shadow host
-      children = node.shadowRoot.children
-    } else if (typeof node.assignedElements === 'function') { // slot
-      children = node.assignedElements()
-    } else if (node.documentElement) { // document
-      children = node.documentElement.children
-    } else { // regular element
-      children = node.children
-    }
-    if (children) {
-      for (let child of children) {
-        results.push(child)
-        walk(child)
-      }
-    }
+class ElementIterator {
+  constructor (context) {
+    this._queue = [context]
+    this.next() // disregard the root
   }
 
-  walk(context)
-
-  return results
+  next () {
+    // create the results list in depth-first order
+    const node = this._queue.pop()
+    if (node) {
+      const children = getChildren(node)
+      if (children) {
+        for (let i = children.length - 1; i >= 0; i--) {
+          this._queue.push(children[i])
+        }
+      }
+    }
+    return node
+  }
 }
 
 // given a list of ast nodes, find the final list and stop when hitting
 // a combinator. for instance "div span > button span strong.foo" should return "strong.foo"
 function getLastNonCombinatorNodes (nodes) {
-  let results = []
+  const results = []
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i]
     if (node.type === 'combinator') {
@@ -79,9 +84,9 @@ function getFirstMatchingPreviousSibling (element, nodes) {
 }
 
 function matches (element, ast) {
-  let { nodes } = ast
+  const { nodes } = ast
   for (let i = nodes.length - 1; i >= 0; i--) {
-    let node = nodes[i]
+    const node = nodes[i]
     if (node.type === 'id') {
       if (element.id !== node.value) {
         return false
@@ -155,12 +160,17 @@ function matches (element, ast) {
   return true
 }
 
-function getMatchingElements (elements, ast) {
-  const results = []
-  for (let element of elements) {
-    for (let node of ast.nodes) { // multiple nodes here are comma-separated
+function getMatchingElements (elementIterator, ast, multiple) {
+  const results = multiple && []
+  let element
+  while ((element = elementIterator.next())) {
+    for (const node of ast.nodes) { // multiple nodes here are comma-separated
       if (matches(element, node)) {
-        results.push(element)
+        if (multiple) {
+          results.push(element)
+        } else {
+          return element
+        }
       }
     }
   }
@@ -171,7 +181,7 @@ function getMatchingElements (elements, ast) {
 // We need this later, and it's easier than passing the selector into every function.
 function attachSourceToPseudos ({ nodes }, selector) {
   const splitSelector = selector.split('\n')
-  for (let node of nodes) {
+  for (const node of nodes) {
     if (node.type === 'pseudo') {
       let sourceCode
       const { start, end } = node.source
@@ -191,16 +201,20 @@ function attachSourceToPseudos ({ nodes }, selector) {
   }
 }
 
-function querySelector (selector, context = document) {
-  return querySelectorAll(selector, context)[0]
-}
-
-function querySelectorAll (selector, context = document) {
+function query (selector, context, multiple) {
   const ast = postcssSelectorParser().astSync(selector)
   attachSourceToPseudos(ast, selector)
 
-  const elements = getAllElements(context)
-  return getMatchingElements(elements, ast)
+  const elementIterator = new ElementIterator(context)
+  return getMatchingElements(elementIterator, ast, multiple)
+}
+
+function querySelector (selector, context = document) {
+  return query(selector, context, false)
+}
+
+function querySelectorAll (selector, context = document) {
+  return query(selector, context, true)
 }
 
 export {
