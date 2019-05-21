@@ -413,6 +413,10 @@ describe('basic test suite', function () {
       {
         selector: 'span.far-right:not(.red-herring),\nspan:nth-child(3)\n,span:nth-child(4)',
         expected: [...center, ...right, ...farRight]
+      },
+      {
+        selector: 'span.far-right:not(\n.red-herring\n)\n,\nspan:nth-child(\n3\n)\n,span:nth-child(4)',
+        expected: [...center, ...right, ...farRight]
       }
     ])
   })

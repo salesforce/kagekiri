@@ -180,18 +180,16 @@ function getMatchingElements (elementIterator, ast, multiple) {
 // For convenience, attach the source to all pseudo selectors.
 // We need this later, and it's easier than passing the selector into every function.
 function attachSourceToPseudos ({ nodes }, selector) {
-  const splitSelector = selector.split('\n')
   for (const node of nodes) {
     if (node.type === 'pseudo') {
-      let sourceCode
+      const splitSelector = selector.split('\n')
       const { start, end } = node.source
-      if (start.line === end.line) {
-        const line = splitSelector[start.line - 1]
-        sourceCode = line.substring(start.column, end.column)
-      } else {
-        const startLine = splitSelector[start.line - 1]
-        const endLine = splitSelector[end.line - 1]
-        sourceCode = startLine.substring(start.column) + endLine.substring(0, end.column)
+      let sourceCode = ''
+      for (let i = start.line - 1; i < end.line; i++) {
+        const line = splitSelector[i]
+        const stringStart = i === start.line - 1 ? start.column : 0
+        const stringEnd = i === end.line - 1 ? end.column : line.length
+        sourceCode += line.substring(stringStart, stringEnd)
       }
       node.sourceCode = ':' + sourceCode
     }
