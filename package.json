@@ -1,6 +1,6 @@
 {
   "name": "kagekiri",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "dist/kagekiri.cjs.js",
   "module": "dist/kagekiri.es.js",
