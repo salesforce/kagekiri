@@ -31,7 +31,8 @@ function config (file, format, opts = {}) {
         }
       }),
       inject({
-        'Object.assign': path.resolve('node_modules/object-assign')
+        'Object.assign': path.resolve('node_modules/object-assign'),
+        exclude: 'node_modules/object-assign/**'
       }),
       ...plugins
     ],
