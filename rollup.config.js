@@ -1,9 +1,11 @@
+import path from 'path'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import cjs from 'rollup-plugin-commonjs'
 import builtins from 'rollup-plugin-node-builtins'
 import globals from 'rollup-plugin-node-globals'
 import buble from 'rollup-plugin-buble'
 import { terser } from 'rollup-plugin-terser'
+import inject from 'rollup-plugin-inject'
 import pkg from './package.json'
 
 const deps = Object.keys(pkg.dependencies)
@@ -27,6 +29,9 @@ function config (file, format, opts = {}) {
         transforms: {
           dangerousForOf: true
         }
+      }),
+      inject({
+        'Object.assign': path.resolve('node_modules/object-assign')
       }),
       ...plugins
     ],
