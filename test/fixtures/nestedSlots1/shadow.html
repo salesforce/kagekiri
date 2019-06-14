@@ -1,0 +1,37 @@
+<div class="container"></div>
+<script>
+  class FancyComponent extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `<slot name="header"></slot>`
+    }
+
+    connectedCallback() {
+      this.setAttribute('class', 'component')
+    }
+  }
+
+  class OtherComponent extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `<fancy-component>
+        <slot name="footer" slot="header">
+          <div class="target">Hello world</div>
+        </slot>
+      </fancy-component>`
+    }
+
+    connectedCallback() {
+      this.setAttribute('class', 'other-component')
+    }
+  }
+
+  customElements.define('fancy-component', FancyComponent)
+  customElements.define('other-component', OtherComponent)
+
+  document.querySelector('.container').innerHTML = `
+    <other-component></other-component>
+  `
+</script>

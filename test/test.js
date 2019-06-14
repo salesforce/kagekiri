@@ -20,6 +20,8 @@ import slotsLight2 from './fixtures/slots2/light.html'
 import slotsShadow2 from './fixtures/slots2/shadow.html'
 import duplicateSlotsLight1 from './fixtures/duplicateSlots1/light.html'
 import duplicateSlotsShadow1 from './fixtures/duplicateSlots1/shadow.html'
+import nestedSlotsLight1 from './fixtures/nestedSlots1/light.html'
+import nestedSlotsShadow1 from './fixtures/nestedSlots1/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -602,6 +604,38 @@ describe('basic test suite', function () {
       {
         selector: 'fancy-component > .text-wrapper',
         expected: []
+      }
+    ])
+  })
+
+  describe('nested slots work', () => {
+    const target = [
+      {
+        tagName: 'DIV',
+        classList: ['target']
+      }
+    ]
+
+    testSelectors(nestedSlotsLight1, nestedSlotsShadow1, [
+      {
+        selector: '.target',
+        expected: target
+      },
+      {
+        selector: '.component .target',
+        expected: target
+      },
+      {
+        selector: '.other-component .target',
+        expected: target
+      },
+      {
+        selector: '.other-component .component .target',
+        expected: target
+      },
+      {
+        selector: '.container .other-component .component .target',
+        expected: target
       }
     ])
   })

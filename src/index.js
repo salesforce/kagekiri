@@ -1,12 +1,12 @@
 import postcssSelectorParser from 'postcss-selector-parser'
 
 function getChildren (node) {
-  if (node.shadowRoot) { // shadow host
-    return node.shadowRoot.children
-  } else if (typeof node.assignedElements === 'function') { // slot
-    return node.assignedElements()
-  } else if (node.documentElement) { // document
+  if (node.documentElement) { // document
     return node.documentElement.children
+  } else if (node.shadowRoot) { // shadow host
+    return node.shadowRoot.children
+  } else if (typeof node.assignedElements === 'function' && !node.assignedSlot) { // slot which is not itself slotted
+    return node.assignedElements()
   } else { // regular element
     return node.children
   }
@@ -47,9 +47,10 @@ function getLastNonCombinatorNodes (nodes) {
   return results.reverse()
 }
 
-function getParentIgnoringShadow (element) {
-  // if an element is slotted, ignore the "real" parent and use the shadow DOM parent
-  if (element.assignedSlot) {
+function getParent (element) {
+  // If an element is slotted, ignore the "real" parent and use the shadow DOM parent.
+  // Unless the slot is also slotted; just return the parent element in this case.
+  if (element.assignedSlot && typeof element.assignedElements !== 'function') {
     return element.assignedSlot.parentElement
   }
   if (element.parentElement) {
@@ -63,13 +64,13 @@ function getParentIgnoringShadow (element) {
 }
 
 function getFirstMatchingAncestor (element, nodes) {
-  let ancestor = getParentIgnoringShadow(element)
+  let ancestor = getParent(element)
   while (ancestor) {
     if (matches(ancestor, { nodes })) {
       return ancestor
     }
 
-    ancestor = getParentIgnoringShadow(ancestor)
+    ancestor = getParent(ancestor)
   }
 }
 
@@ -129,7 +130,7 @@ function matches (element, ast) {
       } else if (node.value === '>') {
         // walk immediate parent only
         const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
-        const ancestor = getParentIgnoringShadow(element)
+        const ancestor = getParent(element)
         if (!ancestor || !matches(ancestor, { nodes: precedingNodes })) {
           return false
         } else {
