@@ -664,6 +664,7 @@ describe('basic test suite', function () {
 
       const text = { tagName: 'SPAN', classList: ['text'] }
 
+      assert.deepStrictEqual(qs(document, '.non-existing-element'), null)
       assertElement(qs(document, '.text'), text)
       assertElement(qs(qs(document, '.component'), '.text'), text)
       assertElement(qs(qs(document, '.container'), '.text'), text)

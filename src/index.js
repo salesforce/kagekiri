@@ -6,6 +6,9 @@
  */
 import postcssSelectorParser from 'postcss-selector-parser'
 
+// IE11 does not have Element.prototype.matches, we can use msMatchesSelector.
+const nativeMatches = Element.prototype.matches || Element.prototype.msMatchesSelector
+
 function getChildren (node) {
   if (node.documentElement) { // document
     return node.documentElement.children
@@ -119,7 +122,7 @@ function matches (element, ast) {
     } else if (node.type === 'pseudo') {
       // For pseudos, just use the native element matcher.
       // `sourceCode` comes from `attachSourceToPseudos()`
-      if (!element.matches(node.sourceCode)) {
+      if (!nativeMatches.call(element, node.sourceCode)) {
         return false
       }
     } else if (node.type === 'combinator') {
@@ -168,7 +171,7 @@ function matches (element, ast) {
 }
 
 function getMatchingElements (elementIterator, ast, multiple) {
-  const results = multiple && []
+  const results = multiple ? [] : null
   let element
   while ((element = elementIterator.next())) {
     for (const node of ast.nodes) { // multiple nodes here are comma-separated
