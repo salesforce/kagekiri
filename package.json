@@ -1,6 +1,6 @@
 {
   "name": "kagekiri",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Shadow DOM-piercing querySelector/querySelectorAll implementation",
   "main": "dist/kagekiri.cjs.js",
   "module": "dist/kagekiri.es.js",
