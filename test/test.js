@@ -28,6 +28,8 @@ import duplicateSlotsLight1 from './fixtures/duplicateSlots1/light.html'
 import duplicateSlotsShadow1 from './fixtures/duplicateSlots1/shadow.html'
 import nestedSlotsLight1 from './fixtures/nestedSlots1/light.html'
 import nestedSlotsShadow1 from './fixtures/nestedSlots1/shadow.html'
+import ofTypeLight1 from './fixtures/ofType1/light.html'
+import ofTypeShadow1 from './fixtures/ofType1/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -642,6 +644,35 @@ describe('basic test suite', function () {
       {
         selector: '.container .other-component .component .target',
         expected: target
+      }
+    ])
+  })
+
+  describe('of-type', () => {
+    testSelectors(ofTypeLight1, ofTypeShadow1, [
+      {
+        selector: 'p:last-of-type',
+        expected: [{ tagName: 'P', classList: ['third'] }]
+      },
+      {
+        selector: 'p:first-of-type',
+        expected: [{ tagName: 'P', classList: ['first'] }]
+      },
+      {
+        selector: 'p:only-of-type',
+        expected: []
+      },
+      {
+        selector: 'br:only-of-type',
+        expected: [{ tagName: 'BR', classList: ['br'] }]
+      },
+      {
+        selector: 'p:nth-of-type(2)',
+        expected: [{ tagName: 'P', classList: ['second'] }]
+      },
+      {
+        selector: 'p:nth-last-of-type(2)',
+        expected: [{ tagName: 'P', classList: ['second'] }]
       }
     ])
   })
