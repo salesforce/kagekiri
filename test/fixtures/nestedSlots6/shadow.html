@@ -1,0 +1,47 @@
+<!--
+  Copyright (c) 2019, salesforce.com, inc.
+  All rights reserved.
+  SPDX-License-Identifier: BSD-3-Clause
+  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<div class="container"></div>
+<script>
+
+    class AlphaComponent extends HTMLElement {
+        constructor () {
+            super()
+            const shadowRoot = this.attachShadow({ mode: 'open' })
+            shadowRoot.innerHTML = `<beta-component>
+              <slot name="theslot">
+                <span class="shown">Default content that should be shown!</span>
+              </slot>
+            </beta-component>`
+        }
+
+        connectedCallback() {
+            this.setAttribute('class', 'alpha-component')
+        }
+    }
+
+    class BetaComponent extends HTMLElement {
+        constructor () {
+            super()
+            const shadowRoot = this.attachShadow({ mode: 'open' })
+            shadowRoot.innerHTML = `
+            <slot slot="theslot">
+              <span class="not-shown">Default content that should not be shown!</span>
+            </slot>`
+        }
+
+        connectedCallback() {
+            this.setAttribute('class', 'beta-component')
+        }
+    }
+
+    customElements.define('alpha-component', AlphaComponent)
+    customElements.define('beta-component', BetaComponent)
+
+    document.querySelector('.container').innerHTML = `
+      <alpha-component></alpha-component>
+    `
+</script>

@@ -12,30 +12,16 @@ import postcssSelectorParser from 'postcss-selector-parser'
 // IE11 does not have Element.prototype.matches, we can use msMatchesSelector.
 const nativeMatches = Element.prototype.matches || Element.prototype.msMatchesSelector
 
-function concat (arrayLike1, arrayLike2) {
-  const res = Array(arrayLike1.length + arrayLike2.length)
-  const len1 = arrayLike1.length
-  const len2 = arrayLike2.length
-  for (let i = 0; i < len1; i++) {
-    res[i] = arrayLike1[i]
-  }
-  for (let i = 0; i < len2; i++) {
-    res[i + len1] = arrayLike2[i]
-  }
-  return res
-}
-
 function getChildren (node) {
   if (node.documentElement) { // document
     return node.documentElement.children
   } else if (node.shadowRoot) { // shadow host
     return node.shadowRoot.children
   } else if (typeof node.assignedElements === 'function') { // slot
-    if (node.assignedSlot) { // slot is itself slotted, so return _all_ children
-      return concat(node.assignedElements(), node.children)
-    } else {
-      return node.assignedElements()
-    }
+    // If the slot has assigned elements, then those
+    // should be shown. Otherwise the (default) children should be shown.
+    const assigned = node.assignedElements()
+    return assigned.length ? assigned : node.children
   } else { // regular element
     return node.children
   }

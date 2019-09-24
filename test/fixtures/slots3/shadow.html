@@ -1,0 +1,26 @@
+<!--
+  Copyright (c) 2019, salesforce.com, inc.
+  All rights reserved.
+  SPDX-License-Identifier: BSD-3-Clause
+  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<div class="container"></div>
+<script>
+  class FancyComponent extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `
+        <slot><div class="default-content">Default content</div></slot>`
+    }
+
+    connectedCallback() {
+      this.setAttribute('class', 'component')
+    }
+  }
+
+  customElements.define('fancy-component', FancyComponent)
+
+  document.querySelector('.container').innerHTML = `
+    <fancy-component></fancy-component>`
+</script>

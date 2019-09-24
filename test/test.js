@@ -24,6 +24,8 @@ import slotsLight1 from './fixtures/slots1/light.html'
 import slotsShadow1 from './fixtures/slots1/shadow.html'
 import slotsLight2 from './fixtures/slots2/light.html'
 import slotsShadow2 from './fixtures/slots2/shadow.html'
+import slotsLight3 from './fixtures/slots3/light.html'
+import slotsShadow3 from './fixtures/slots3/shadow.html'
 import duplicateSlotsLight1 from './fixtures/duplicateSlots1/light.html'
 import duplicateSlotsShadow1 from './fixtures/duplicateSlots1/shadow.html'
 import nestedSlotsLight1 from './fixtures/nestedSlots1/light.html'
@@ -36,6 +38,12 @@ import nestedSlotsLight3 from './fixtures/nestedSlots3/light.html'
 import nestedSlotsShadow3 from './fixtures/nestedSlots3/shadow.html'
 import nestedSlotsLight4 from './fixtures/nestedSlots4/light.html'
 import nestedSlotsShadow4 from './fixtures/nestedSlots4/shadow.html'
+import nestedSlotsLight5 from './fixtures/nestedSlots5/light.html'
+import nestedSlotsShadow5 from './fixtures/nestedSlots5/shadow.html'
+import nestedSlotsLight6 from './fixtures/nestedSlots6/light.html'
+import nestedSlotsShadow6 from './fixtures/nestedSlots6/shadow.html'
+import nestedSlotsLight7 from './fixtures/nestedSlots7/light.html'
+import nestedSlotsShadow7 from './fixtures/nestedSlots7/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -572,6 +580,29 @@ describe('basic test suite', function () {
     ])
   })
 
+  describe('slots with default content', () => {
+    testSelectors(slotsLight3, slotsShadow3, [
+      {
+        selector: '.component .default-content',
+        expected: [
+          {
+            tagName: 'DIV',
+            classList: ['default-content']
+          }
+        ]
+      },
+      {
+        selector: '.default-content',
+        expected: [
+          {
+            tagName: 'DIV',
+            classList: ['default-content']
+          }
+        ]
+      }
+    ])
+  })
+
   describe('slots are not duplicated', () => {
     const buttons = [
       {
@@ -714,6 +745,61 @@ describe('basic test suite', function () {
       {
         selector: '.alpha-component .beta-component .gamma-component .hello',
         expected: [{ tagName: 'DIV', classList: ['hello'] }]
+      }
+    ])
+  })
+
+  describe('nested slots 5', () => {
+    testSelectors(nestedSlotsLight5, nestedSlotsShadow5, [
+      {
+        selector: '.hello',
+        expected: [{ tagName: 'DIV', classList: ['hello'] }]
+      },
+      {
+        selector: '.alpha-component .beta-component .gamma-component .hello',
+        expected: [{ tagName: 'DIV', classList: ['hello'] }]
+      },
+      {
+        selector: '.default-content',
+        expected: []
+      }
+    ])
+  })
+
+  describe('nested slots 6', () => {
+    testSelectors(nestedSlotsLight6, nestedSlotsShadow6, [
+      {
+        selector: '.shown',
+        expected: [{ tagName: 'SPAN', classList: ['shown'] }]
+      },
+      {
+        selector: '.alpha-component .beta-component .shown',
+        expected: [{ tagName: 'SPAN', classList: ['shown'] }]
+      },
+      {
+        selector: '.not-shown',
+        expected: []
+      }
+    ])
+  })
+
+  describe('nested slots 7', () => {
+    testSelectors(nestedSlotsLight7, nestedSlotsShadow7, [
+      {
+        selector: '.hello',
+        expected: [{ tagName: 'SPAN', classList: ['hello'] }]
+      },
+      {
+        selector: '.alpha-component .beta-component .gamma-component .hello',
+        expected: [{ tagName: 'SPAN', classList: ['hello'] }]
+      },
+      {
+        selector: '.not-shown',
+        expected: []
+      },
+      {
+        selector: '.also-not-shown',
+        expected: []
       }
     ])
   })
