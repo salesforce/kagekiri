@@ -1,0 +1,52 @@
+<!--
+  Copyright (c) 2019, salesforce.com, inc.
+  All rights reserved.
+  SPDX-License-Identifier: BSD-3-Clause
+  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<div class="container"></div>
+<script>
+  class OuterComponent extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `<inner-component><another-component slot="main"></another-component></inner-component>`
+    }
+
+    connectedCallback() {
+      this.setAttribute('class', 'outer-component')
+    }
+  }
+
+  class InnerComponent extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `<slot name="main"></slot>`
+    }
+
+    connectedCallback() {
+      this.setAttribute('class', 'inner-component')
+    }
+  }
+
+  class AnotherComponent extends HTMLElement {
+      constructor() {
+          super()
+          const shadowRoot = this.attachShadow({mode: 'open'})
+          shadowRoot.innerHTML = `<div class="hello">Hello world</div>`
+      }
+
+      connectedCallback() {
+          this.setAttribute('class', 'another-component')
+      }
+  }
+
+  customElements.define('outer-component', OuterComponent)
+  customElements.define('inner-component', InnerComponent)
+  customElements.define('another-component', AnotherComponent)
+
+  document.querySelector('.container').innerHTML = `
+    <outer-component></outer-component>
+  `
+</script>

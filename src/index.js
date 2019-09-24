@@ -12,13 +12,30 @@ import postcssSelectorParser from 'postcss-selector-parser'
 // IE11 does not have Element.prototype.matches, we can use msMatchesSelector.
 const nativeMatches = Element.prototype.matches || Element.prototype.msMatchesSelector
 
+function concat (arrayLike1, arrayLike2) {
+  const res = Array(arrayLike1.length + arrayLike2.length)
+  const len1 = arrayLike1.length
+  const len2 = arrayLike2.length
+  for (let i = 0; i < len1; i++) {
+    res[i] = arrayLike1[i]
+  }
+  for (let i = 0; i < len2; i++) {
+    res[i + len1] = arrayLike2[i]
+  }
+  return res
+}
+
 function getChildren (node) {
   if (node.documentElement) { // document
     return node.documentElement.children
   } else if (node.shadowRoot) { // shadow host
     return node.shadowRoot.children
-  } else if (typeof node.assignedElements === 'function' && !node.assignedSlot) { // slot which is not itself slotted
-    return node.assignedElements()
+  } else if (typeof node.assignedElements === 'function') { // slot
+    if (node.assignedSlot) { // slot is itself slotted, so return _all_ children
+      return concat(node.assignedElements(), node.children)
+    } else {
+      return node.assignedElements()
+    }
   } else { // regular element
     return node.children
   }
@@ -62,7 +79,7 @@ function getLastNonCombinatorNodes (nodes) {
 function getParent (element) {
   // If an element is slotted, ignore the "real" parent and use the shadow DOM parent.
   // Unless the slot is also slotted; just return the parent element in this case.
-  if (element.assignedSlot && typeof element.assignedElements !== 'function') {
+  if (typeof element.assignedElements !== 'function' && element.assignedSlot && element.assignedSlot.parentElement) {
     return element.assignedSlot.parentElement
   }
   if (element.parentElement) {

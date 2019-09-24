@@ -30,6 +30,12 @@ import nestedSlotsLight1 from './fixtures/nestedSlots1/light.html'
 import nestedSlotsShadow1 from './fixtures/nestedSlots1/shadow.html'
 import ofTypeLight1 from './fixtures/ofType1/light.html'
 import ofTypeShadow1 from './fixtures/ofType1/shadow.html'
+import nestedSlotsLight2 from './fixtures/nestedSlots2/light.html'
+import nestedSlotsShadow2 from './fixtures/nestedSlots2/shadow.html'
+import nestedSlotsLight3 from './fixtures/nestedSlots3/light.html'
+import nestedSlotsShadow3 from './fixtures/nestedSlots3/shadow.html'
+import nestedSlotsLight4 from './fixtures/nestedSlots4/light.html'
+import nestedSlotsShadow4 from './fixtures/nestedSlots4/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -673,6 +679,41 @@ describe('basic test suite', function () {
       {
         selector: 'p:nth-last-of-type(2)',
         expected: [{ tagName: 'P', classList: ['second'] }]
+      }
+    ])
+  })
+
+  describe('nested slots 2', () => {
+    testSelectors(nestedSlotsLight2, nestedSlotsShadow2, [
+      {
+        selector: '.outer-component .inner-component .another-component .hello',
+        expected: [{ tagName: 'DIV', classList: ['hello'] }]
+      }
+    ])
+  })
+
+  describe('nested slots 3', () => {
+    testSelectors(nestedSlotsLight3, nestedSlotsShadow3, [
+      {
+        selector: '.outer-component .inner-component .another-component .yet-another-component .hello',
+        expected: [{ tagName: 'DIV', classList: ['hello'] }]
+      },
+      {
+        selector: '.hello',
+        expected: [{ tagName: 'DIV', classList: ['hello'] }]
+      }
+    ])
+  })
+
+  describe('nested slots 4', () => {
+    testSelectors(nestedSlotsLight4, nestedSlotsShadow4, [
+      {
+        selector: '.hello',
+        expected: [{ tagName: 'DIV', classList: ['hello'] }]
+      },
+      {
+        selector: '.alpha-component .beta-component .gamma-component .hello',
+        expected: [{ tagName: 'DIV', classList: ['hello'] }]
       }
     ])
   })
