@@ -26,6 +26,55 @@ const elements = querySelectorAll('button', otherElement)
 const element = querySelector('button', otherElement)
 ```
 
+Example
+---
+
+A custom element:
+
+```html
+<my-component></my-component>
+<script>
+  class MyComponent extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = '<span class="hello">Hello</span>'
+    }
+  }
+  customElements.define('my-component', MyComponent)
+</script>
+```
+
+It renders as:
+
+```html
+<my-component>
+  <!-- shadow root (open) -->
+  <span class="hello">Hello</span>
+</my-component>
+```
+
+You can't query the `.hello` element:
+
+```js
+document.querySelector('.hello')    // undefined 😞
+document.querySelectorAll('.hello') // empty 😞
+```
+
+But with `kagekiri` you can!
+
+```js
+kagekiri.querySelector('.hello')    // <span> 😃
+kagekiri.querySelectorAll('.hello') // [<span>] 😃
+```
+
+Your can even query _across_ the shadow boundary!
+
+```js
+kagekiri.querySelector('my-component .hello')   // <span> 😃
+kagekiri.querySelector('my-component > .hello') // <span> 😃
+```
+
 How it works
 ---
 
