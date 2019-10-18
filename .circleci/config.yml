@@ -3,7 +3,9 @@ jobs:
   build:
     working_directory: ~/kagekiri
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:10-browsers
+        environment:
+          CHROME_BIN: '/usr/bin/google-chrome'
     steps:
       - checkout
       - run:
