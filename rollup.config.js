@@ -7,7 +7,6 @@
 import path from 'path'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import cjs from 'rollup-plugin-commonjs'
-import builtins from 'rollup-plugin-node-builtins'
 import globals from 'rollup-plugin-node-globals'
 import buble from 'rollup-plugin-buble'
 import { terser } from 'rollup-plugin-terser'
@@ -27,9 +26,11 @@ function config (file, format, opts = {}) {
       name: 'kagekiri'
     },
     plugins: [
-      nodeResolve(),
+      nodeResolve({
+        mainFields: ['browser', 'module', 'main'],
+        preferBuiltins: false
+      }),
       cjs(),
-      builtins(),
       globals(),
       buble({
         transforms: {

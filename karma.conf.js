@@ -25,9 +25,11 @@ module.exports = function (config) {
 
     rollupPreprocessor: {
       plugins: [
-        require('rollup-plugin-node-resolve')({ preferBuiltins: true }),
+        require('rollup-plugin-node-resolve')({
+          mainFields: ['browser', 'module', 'main'],
+          preferBuiltins: false
+        }),
         require('rollup-plugin-commonjs')(),
-        require('rollup-plugin-node-builtins')(),
         require('rollup-plugin-node-globals')(),
         require('rollup-plugin-string').string({
           include: '**/*.html'
