@@ -1,4 +1,4 @@
-kagekiri
+kagekiri [![build status](https://circleci.com/gh/salesforce/kagekiri.svg?style=svg)](https://circleci.com/gh/salesforce/kagekiri)
 ====
 
 Shadow DOM-piercing `querySelector()` / `querySelectorAll()` implementation.
