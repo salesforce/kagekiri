@@ -14,6 +14,8 @@ import deepLight1 from './fixtures/deep1/light.html'
 import deepShadow1 from './fixtures/deep1/shadow.html'
 import attributeLight1 from './fixtures/attribute1/light.html'
 import attributeShadow1 from './fixtures/attribute1/shadow.html'
+import attributeLight2 from './fixtures/attribute2/light.html'
+import attributeShadow2 from './fixtures/attribute2/shadow.html'
 import siblingLight1 from './fixtures/sibling1/light.html'
 import siblingShadow1 from './fixtures/sibling1/shadow.html'
 import idLight1 from './fixtures/id1/light.html'
@@ -231,6 +233,57 @@ describe('basic test suite', function () {
       },
       {
         selector: '[data-foo="fake"]',
+        expected: []
+      }
+    ])
+  })
+
+  describe('attribute selectors like *= and ^=', () => {
+    const expected = [
+      {
+        tagName: 'SPAN',
+        classList: ['text']
+      }
+    ]
+    testSelectors(attributeLight2, attributeShadow2, [
+      {
+        selector: '[data-foo^="Hello"]',
+        expected
+      },
+      {
+        selector: '[data-foo*="world"]',
+        expected
+      },
+      {
+        selector: '[data-foo$="world"]',
+        expected
+      },
+      {
+        selector: '[data-foo~="world"]',
+        expected
+      },
+      {
+        selector: '[data-foo|="Hello world"]',
+        expected
+      },
+      {
+        selector: '[data-foo*="HeLLo WoRLd" i]',
+        expected
+      },
+      {
+        selector: '[data-foo*="wrrrrld"]',
+        expected: []
+      },
+      {
+        selector: '[data-foo$="Hello"]',
+        expected: []
+      },
+      {
+        selector: '[data-foo^="world"]',
+        expected: []
+      },
+      {
+        selector: '[data-foo*="HeLLo WoRLd"]',
         expected: []
       }
     ])
