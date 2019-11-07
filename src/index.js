@@ -115,19 +115,9 @@ function matches (element, ast) {
       if (element.tagName.toLowerCase() !== node.value.toLowerCase()) {
         return false
       }
-    } else if (node.type === 'attribute') {
-      if (node.value) { // e.g. [data-foo="bar"]
-        if (element.getAttribute(node.attribute) !== node.value) {
-          return false
-        }
-      } else { // e.g. [data-foo]
-        if (!element.hasAttribute(node.attribute)) {
-          return false
-        }
-      }
-    } else if (node.type === 'pseudo') {
-      // For pseudos, just use the native element matcher.
-      // `sourceCode` comes from `attachSourceToPseudos()`
+    } else if (node.type === 'pseudo' || node.type === 'attribute') {
+      // For pseudos and attributes, just use the native element matcher.
+      // `sourceCode` comes from `attachSourceIfNecessary()`
       if (!nativeMatches.call(element, node.sourceCode)) {
         return false
       }
@@ -195,9 +185,9 @@ function getMatchingElements (elementIterator, ast, multiple) {
 
 // For convenience, attach the source to all pseudo selectors.
 // We need this later, and it's easier than passing the selector into every function.
-function attachSourceToPseudos ({ nodes }, selector) {
+function attachSourceIfNecessary ({ nodes }, selector) {
   for (const node of nodes) {
-    if (node.type === 'pseudo') {
+    if (node.type === 'pseudo' || node.type === 'attribute') {
       const splitSelector = selector.split('\n')
       const { start, end } = node.source
       let sourceCode = ''
@@ -207,17 +197,17 @@ function attachSourceToPseudos ({ nodes }, selector) {
         const stringEnd = i === end.line - 1 ? end.column : line.length
         sourceCode += line.substring(stringStart, stringEnd)
       }
-      node.sourceCode = ':' + sourceCode
+      node.sourceCode = (node.type === 'pseudo' ? ':' : '[') + sourceCode
     }
     if (node.nodes) {
-      attachSourceToPseudos(node, selector)
+      attachSourceIfNecessary(node, selector)
     }
   }
 }
 
 function query (selector, context, multiple) {
   const ast = postcssSelectorParser().astSync(selector)
-  attachSourceToPseudos(ast, selector)
+  attachSourceIfNecessary(ast, selector)
 
   const elementIterator = new ElementIterator(context)
   return getMatchingElements(elementIterator, ast, multiple)
