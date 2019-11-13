@@ -7,7 +7,7 @@
 /* global it describe */
 
 import { querySelectorAll, querySelector } from '../src/index.js'
-import assert from 'assert'
+import * as assert from 'assert'
 import simpleLight1 from './fixtures/simple1/light.html'
 import simpleShadow1 from './fixtures/simple1/shadow.html'
 import deepLight1 from './fixtures/deep1/light.html'
