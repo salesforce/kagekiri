@@ -47,8 +47,7 @@
     "rollup-plugin-node-resolve": "^4.2.3",
     "rollup-plugin-string": "^3.0.0",
     "rollup-plugin-terser": "^4.0.4",
-    "standard": "^12.0.1",
-    "util": "^0.12.1"
+    "standard": "^12.0.1"
   },
   "files": [
     "dist"
