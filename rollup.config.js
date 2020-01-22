@@ -11,13 +11,13 @@ import globals from 'rollup-plugin-node-globals'
 import buble from 'rollup-plugin-buble'
 import { terser } from 'rollup-plugin-terser'
 import inject from 'rollup-plugin-inject'
-import pkg from './package.json'
 
-const deps = Object.keys(pkg.dependencies)
+// Note that postcss-selector-parser is bundled into all outputs because its deps (util.promisify)
+// cause problems depending on the consumer's bundler. We can make things simpler for consumers of
+// kagekiri by just bundling our dependencies.
 
 function config (file, format, opts = {}) {
   const plugins = opts.plugins || []
-  const external = opts.external || []
   return {
     input: './src/index.js',
     output: {
@@ -42,16 +42,15 @@ function config (file, format, opts = {}) {
         exclude: 'node_modules/object-assign/**'
       }),
       ...plugins
-    ],
-    external
+    ]
   }
 }
 
 export default [
   config('dist/kagekiri.umd.js', 'umd'),
   config('dist/kagekiri.umd.min.js', 'umd', { plugins: [terser()] }),
-  config('dist/kagekiri.cjs.js', 'cjs', { external: deps }),
-  config('dist/kagekiri.es.js', 'es', { external: deps }),
+  config('dist/kagekiri.cjs.js', 'cjs'),
+  config('dist/kagekiri.es.js', 'es'),
   config('dist/kagekiri.iife.js', 'iife'),
   config('dist/kagekiri.iife.min.js', 'iife', { plugins: [terser()] })
 ]
