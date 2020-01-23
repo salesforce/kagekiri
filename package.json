@@ -58,5 +58,6 @@
   "bugs": {
     "url": "https://github.com/salesforce/kagekiri/issues"
   },
-  "homepage": "https://github.com/salesforce/kagekiri#readme"
+  "homepage": "https://github.com/salesforce/kagekiri#readme",
+  "sideEffects": false
 }
