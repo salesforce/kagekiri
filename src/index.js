@@ -7,6 +7,8 @@
 
 /* global Element */
 
+import 'string.prototype.startswith'
+import 'string.prototype.endswith'
 import postcssSelectorParser from 'postcss-selector-parser'
 
 // IE11 does not have Element.prototype.matches, we can use msMatchesSelector.
