@@ -6,7 +6,7 @@
  */
 /* global it describe */
 
-import { querySelectorAll, querySelector } from '../src/index.js'
+import { querySelectorAll, querySelector, getElementsByTagName, getElementsByTagNameNS } from '../src/index.js'
 import assert from 'assert'
 import simpleLight1 from './fixtures/simple1/light.html'
 import simpleShadow1 from './fixtures/simple1/shadow.html'
@@ -46,6 +46,8 @@ import nestedSlotsLight6 from './fixtures/nestedSlots6/light.html'
 import nestedSlotsShadow6 from './fixtures/nestedSlots6/shadow.html'
 import nestedSlotsLight7 from './fixtures/nestedSlots7/light.html'
 import nestedSlotsShadow7 from './fixtures/nestedSlots7/shadow.html'
+import tagNameLight1 from './fixtures/tagName1/light.html'
+import tagNameShadow1 from './fixtures/tagName1/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -82,7 +84,7 @@ function stringify (obj) {
   return JSON.stringify(obj)
 }
 
-function assertSelectorEqual (selector, actual, expected, qsa) {
+function assertResultEqual (selector, actual, expected, qsa) {
   if (qsa) {
     actual = simplifyElements(actual)
   } else {
@@ -97,22 +99,22 @@ function testSelectors (lightDom, shadowDom, tests) {
   tests.forEach(({ selector, expected }) => {
     it('light DOM - qSA', () => {
       withDom(lightDom, context => {
-        assertSelectorEqual(selector, context.querySelectorAll(selector), expected, true)
+        assertResultEqual(selector, context.querySelectorAll(selector), expected, true)
       })
     })
     it('shadow DOM - qSA', () => {
       withDom(shadowDom, context => {
-        assertSelectorEqual(selector, querySelectorAll(selector, context), expected, true)
+        assertResultEqual(selector, querySelectorAll(selector, context), expected, true)
       })
     })
     it('light DOM - qS', () => {
       withDom(lightDom, context => {
-        assertSelectorEqual(selector, context.querySelector(selector), expected, false)
+        assertResultEqual(selector, context.querySelector(selector), expected, false)
       })
     })
     it('shadow DOM - qSA', () => {
       withDom(shadowDom, context => {
-        assertSelectorEqual(selector, querySelector(selector, context), expected, false)
+        assertResultEqual(selector, querySelector(selector, context), expected, false)
       })
     })
   })
@@ -891,5 +893,213 @@ describe('basic test suite', function () {
 
     withDom(simpleLight1, test(true))
     withDom(simpleShadow1, test(false))
+  })
+
+  describe('getElementsByTagName', () => {
+    it('light DOM - handles tag names', () => {
+      const tagName1 = "svg";
+      const expected1 = [
+        {
+          tagName: 'svg',
+          classList: []
+        }
+      ]
+      withDom(tagNameLight1, context => {
+        assertResultEqual(tagName1, context.getElementsByTagName(tagName1), expected1, true)
+      })
+      const tagName2 = "span";
+      const expected2 = [
+        {
+          tagName: 'SPAN',
+          classList: []
+        }
+      ]
+      withDom(tagNameLight1, context => {
+        assertResultEqual(tagName2, context.getElementsByTagName(tagName2), expected2, true)
+      })
+    });
+
+    it('shadow DOM - handles tag names', () => {
+      const tagName1 = "svg";
+      const expected1 = [
+        {
+          tagName: 'svg',
+          classList: []
+        }
+      ]
+      withDom(tagNameShadow1, context => {
+        assertResultEqual(tagName1, getElementsByTagName(tagName1, context), expected1, true)
+      })
+      const tagName2 = "span";
+      const expected2 = [
+        {
+          tagName: 'SPAN',
+          classList: []
+        }
+      ]
+      withDom(tagNameShadow1, context => {
+        assertResultEqual(tagName2, getElementsByTagName(tagName2, context), expected2, true)
+      })
+    });
+
+    it('light DOM - handles wildcards', () => {
+      const tagName = "*";
+      const expected = [
+        {
+          tagName: 'HTML',
+          classList: []
+        },
+        {
+          tagName: 'HEAD',
+          classList: []
+        },
+        {
+          tagName: 'BODY',
+          classList: []
+        },
+        {
+          tagName: 'DIV',
+          classList: ['container']
+        },
+        {
+          tagName: 'DIV',
+          classList: ['outer-component']
+        },
+        {
+          tagName: 'DIV',
+          classList: ['wrapper']
+        },
+        {
+          tagName: 'DIV',
+          classList: ['inner-component']
+        },
+        {
+          tagName: 'SPAN',
+          classList: []
+        },
+        {
+          tagName: 'svg',
+          classList: []
+        },
+        {
+          tagName: 'defs',
+          classList: []
+        },
+        {
+          tagName: 'linearGradient',
+          classList: []
+        },
+        {
+          tagName: 'stop',
+          classList: []
+        },
+        {
+          tagName: 'stop',
+          classList: []
+        },
+        {
+          tagName: 'circle',
+          classList: []
+        }
+      ]
+      withDom(tagNameLight1, context => {
+        assertResultEqual(tagName, context.getElementsByTagName(tagName), expected, true)
+      })
+    });
+
+    it('shadow DOM - handles wildcards', () => {
+      const tagName = "*";
+      const expected = [
+        {
+          tagName: 'HEAD',
+          classList: []
+        },
+        {
+          tagName: 'BODY',
+          classList: []
+        },
+        {
+          tagName: 'DIV',
+          classList: ['container']
+        },
+        {
+          tagName: 'OUTER-COMPONENT',
+          classList: []
+        },
+        {
+          tagName: 'DIV',
+          classList: ['wrapper']
+        },
+        {
+          tagName: 'INNER-COMPONENT',
+          classList: []
+        },
+        {
+          tagName: 'SPAN',
+          classList: []
+        },
+        {
+          tagName: 'svg',
+          classList: []
+        },
+        {
+          tagName: 'defs',
+          classList: []
+        },
+        {
+          tagName: 'linearGradient',
+          classList: []
+        },
+        {
+          tagName: 'stop',
+          classList: []
+        },
+        {
+          tagName: 'stop',
+          classList: []
+        },
+        {
+          tagName: 'circle',
+          classList: []
+        },
+        {
+          tagName: 'SCRIPT',
+          classList: []
+        }
+      ]
+      withDom(tagNameShadow1, context => {
+        assertResultEqual(tagName, getElementsByTagName(tagName, context), expected, true)
+      })
+    });
+
+    it('light DOM - is case insensitive', () => {
+      const tagName = "SpAn";
+      const expected = [
+        {
+          tagName: 'SPAN',
+          classList: []
+        }
+      ]
+      withDom(tagNameLight1, context => {
+        assertResultEqual(tagName, context.getElementsByTagName(tagName), expected, true)
+      })
+    });
+
+    it('shadow DOM - is case insensitive', () => {
+      const tagName = "SpAn";
+      const expected = [
+        {
+          tagName: 'SPAN',
+          classList: []
+        }
+      ]
+      withDom(tagNameShadow1, context => {
+        assertResultEqual(tagName, getElementsByTagName(tagName, context), expected, true)
+      })
+    });
+  })
+
+  describe('getElementsByTagNameNS', () => {
+    
   })
 })

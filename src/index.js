@@ -185,6 +185,46 @@ function getMatchingElements (elementIterator, ast, multiple) {
   return results
 }
 
+/**
+ * https://dom.spec.whatwg.org/#concept-getelementsbytagnamens
+ */
+function getMatchingElementsByTagName (elementIterator, tagName) {
+  const results = [];
+  let element
+  while ((element = elementIterator.next())) {
+    // case insensitive matching differs from browser behavior due to 10 year old bugs in browser
+    if(tagName.toLowerCase() === element.tagName.toLowerCase() || tagName === '*') {
+      results.push(element);
+    }
+  }
+  return results
+}
+
+/**
+ * https://dom.spec.whatwg.org/#concept-getelementsbytagnamens
+ */
+function getMatchingElementsByTagNameNS (elementIterator, namespaceURI, tagName) {
+  const results = [];
+  // exit early if null, empty string or undefined is provided
+  // these will not match the element namespace
+  if (!namespaceURI) {
+    return results;
+  }
+  let element
+  while ((element = elementIterator.next())) {
+
+    // tagName supports a wildcard parameter 
+    // case insensitive matching differs from browser behavior due to 10 year old bugs in browser
+    if(tagName.toLowerCase() === element.tagName.toLowerCase() || tagName === '*') {
+      // namespace supports a wildcard parameter
+      if(element.namespaceURI === namespaceURI || namespaceURI === '*') {
+        results.push(element);
+      }
+    }
+  }
+  return results
+}
+
 // For convenience, attach the source to all pseudo selectors.
 // We need this later, and it's easier than passing the selector into every function.
 function attachSourceIfNecessary ({ nodes }, selector) {
@@ -215,6 +255,16 @@ function query (selector, context, multiple) {
   return getMatchingElements(elementIterator, ast, multiple)
 }
 
+function getElementsByTagName (tagName, context = document) {
+  const elementIterator = new ElementIterator(context)
+  return getMatchingElementsByTagName(elementIterator, tagName)
+}
+
+function getElementsByTagNameNS (namespaceURI, tagName, context = document) {
+  const elementIterator = new ElementIterator(context)
+  return getMatchingElementsByTagNameNS(elementIterator, namespaceURI, tagName)
+}
+
 function querySelector (selector, context = document) {
   return query(selector, context, false)
 }
@@ -225,5 +275,7 @@ function querySelectorAll (selector, context = document) {
 
 export {
   querySelectorAll,
-  querySelector
+  querySelector,
+  getElementsByTagName,
+  getElementsByTagNameNS
 }
