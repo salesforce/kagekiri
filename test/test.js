@@ -6,7 +6,7 @@
  */
 /* global it describe */
 
-import { querySelectorAll, querySelector } from '../src/index.js'
+import { querySelectorAll, querySelector, getElementsByClassName } from '../src/index.js'
 import assert from 'assert'
 import simpleLight1 from './fixtures/simple1/light.html'
 import simpleShadow1 from './fixtures/simple1/shadow.html'
@@ -48,6 +48,10 @@ import nestedSlotsLight7 from './fixtures/nestedSlots7/light.html'
 import nestedSlotsShadow7 from './fixtures/nestedSlots7/shadow.html'
 import unusualSelectorsLight1 from './fixtures/unusualSelectors1/light.html'
 import unusualSelectorsShadow1 from './fixtures/unusualSelectors1/shadow.html'
+import classNamesLight1 from './fixtures/classNames1/light.html';
+import classNamesShadow1 from './fixtures/classNames1/shadow.html';
+import classNamesLight2 from './fixtures/classNames2/light.html';
+import classNamesShadow2 from './fixtures/classNames2/shadow.html';
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -84,8 +88,8 @@ function stringify (obj) {
   return JSON.stringify(obj)
 }
 
-function assertSelectorEqual (selector, actual, expected, qsa) {
-  if (qsa) {
+function assertResultEqual (selector, actual, expected, returnsCollection) {
+  if (returnsCollection) {
     actual = simplifyElements(actual)
   } else {
     actual = simplifyElement(actual)
@@ -99,22 +103,22 @@ function testSelectors (lightDom, shadowDom, tests) {
   tests.forEach(({ selector, expected }) => {
     it('light DOM - qSA', () => {
       withDom(lightDom, context => {
-        assertSelectorEqual(selector, context.querySelectorAll(selector), expected, true)
+        assertResultEqual(selector, context.querySelectorAll(selector), expected, true)
       })
     })
     it('shadow DOM - qSA', () => {
       withDom(shadowDom, context => {
-        assertSelectorEqual(selector, querySelectorAll(selector, context), expected, true)
+        assertResultEqual(selector, querySelectorAll(selector, context), expected, true)
       })
     })
     it('light DOM - qS', () => {
       withDom(lightDom, context => {
-        assertSelectorEqual(selector, context.querySelector(selector), expected, false)
+        assertResultEqual(selector, context.querySelector(selector), expected, false)
       })
     })
     it('shadow DOM - qSA', () => {
       withDom(shadowDom, context => {
-        assertSelectorEqual(selector, querySelector(selector, context), expected, false)
+        assertResultEqual(selector, querySelector(selector, context), expected, false)
       })
     })
   })
@@ -929,5 +933,103 @@ describe('basic test suite', function () {
       { selector: '[data-hashdot="hash\\#\\.dot"]', expected: hashDot },
       { selector: "[data-hashdot='hash\\#\\.dot']", expected: hashDot }
     ])
+  })
+
+  describe('getElementsByClassName', () => {
+    it('light DOM - getElementsByClassName', () => {
+      const classNames = "container main";
+      const expected = [
+        {
+          tagName: 'DIV',
+          classList: ['container', 'main']
+        },
+        {
+          tagName: 'SPAN',
+          classList: ['container', 'main', 'outerText']
+        },
+        {
+          tagName: 'SPAN',
+          classList: ['container', 'main', 'innerText']
+        }
+      ]
+      withDom(classNamesLight1, context => {
+        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
+      })
+    })
+
+    it('shadow DOM - getElementsByClassName', () => {
+      const classNames = "container main";
+      const expected = [
+        {
+          tagName: 'DIV',
+          classList: ['container', 'main']
+        },
+        {
+          tagName: 'SPAN',
+          classList: ['container', 'main', 'outerText']
+        },
+        {
+          tagName: 'SPAN',
+          classList: ['container', 'main', 'innerText']
+        }
+      ]
+      withDom(classNamesShadow1, context => {
+        assertResultEqual(".container.main", getElementsByClassName(classNames, context), expected, true)
+      })
+    })
+
+    it('light DOM - getElementsByClassName with weird spaces', () => {
+      const expected = [
+        {
+          tagName: 'DIV',
+          classList: ['container', 'main']
+        },
+        {
+          tagName: 'SPAN',
+          classList: ['container', 'main', 'outerText']
+        },
+        {
+          tagName: 'SPAN',
+          classList: ['container', 'main', 'innerText']
+        }
+      ]
+      withDom(classNamesLight1, context => {
+        let classNames = "container      main";
+        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
+        classNames = `main
+        
+        
+        
+                    container    `;
+        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
+      })
+    })
+
+    it('shadow DOM - getElementsByClassName with weird spaces', () => {
+      const expected = [
+        {
+          tagName: 'DIV',
+          classList: ['container', 'main']
+        },
+        {
+          tagName: 'SPAN',
+          classList: ['container', 'main', 'outerText']
+        },
+        {
+          tagName: 'SPAN',
+          classList: ['container', 'main', 'innerText']
+        }
+      ]
+      withDom(classNamesLight1, context => {
+        let classNames = "container      main";
+        assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
+        classNames = `main
+        
+        
+        
+                    container    `;
+        assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
+      })
+    })
   })
 })

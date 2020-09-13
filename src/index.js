@@ -223,7 +223,18 @@ function querySelectorAll (selector, context = document) {
   return query(selector, context, true)
 }
 
+function getElementsByClassName (classNames, context = document) {
+  const oneSpaceSeparator = classNames.trim().replace(/\s\s+/g, ' ');
+  const classNamesSplit = oneSpaceSeparator.split(' ');
+  let selector = "";
+  for (let i = 0; i < classNamesSplit.length; i++) {
+    selector += '.' + classNamesSplit[i];
+  }
+  return query(selector, context, true);
+}
+
 export {
   querySelectorAll,
-  querySelector
+  querySelector,
+  getElementsByClassName
 }
