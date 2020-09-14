@@ -124,3 +124,9 @@ Fix most lint issues:
 ```sh
 npm run lint:fix
 ```
+
+Test bundle size:
+
+```sh
+npm run test:bundlesize
+```
