@@ -7,6 +7,7 @@
   "scripts": {
     "test": "karma start --single-run",
     "test:debug": "karma start --browsers=Chrome --single-run=false",
+    "test:bundlesize": "bundlesize",
     "build": "rollup -c",
     "prepare": "npm run build",
     "lint": "standard *.js src/**/*.js test/**/*.js",
@@ -33,6 +34,7 @@
     "@rollup/plugin-inject": "^4.0.2",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "assert": "^2.0.0",
+    "bundlesize": "^0.18.0",
     "karma": "^5.2.2",
     "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^1.3.0",
@@ -60,5 +62,12 @@
     "url": "https://github.com/salesforce/kagekiri/issues"
   },
   "homepage": "https://github.com/salesforce/kagekiri#readme",
-  "sideEffects": false
+  "sideEffects": false,
+  "bundlesize": [
+    {
+      "path": "./dist/kagekiri.iife.min.js",
+      "maxSize": "55 kB",
+      "compression": "none"
+    }
+  ]
 }

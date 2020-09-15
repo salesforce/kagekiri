@@ -26,3 +26,6 @@ jobs:
       - run: # run tests
           name: test
           command: npm test
+      - run: # check bundle size
+          name: bundlesize
+          command: npm run test:bundlesize
