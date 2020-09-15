@@ -3,16 +3,16 @@ kagekiri [![build status](https://circleci.com/gh/salesforce/kagekiri.svg?style=
 
 Shadow DOM-piercing query APIs
 
-| API                      | Status |
-|--------------------------|:------:|
-| `querySelector`          |   ✅   |
-| `querySelectorAll`       |   ✅   |
-| `getElementsByClassName` |   ✅   |
-| `getElementsByTagName`   |   🚧   |
-| `getElementsByTagNameNS` |   🚧   |
-| `getElementById`         |   🚧   |
-| `getElementsByName`      |   🚧   |
-| `matches`                |   🚧   |
+| API                      |     Interface     | Support |
+|--------------------------|-------------------|:------:|
+| `querySelector`          | Element, Document |    ✅    |
+| `querySelectorAll`       | Element, Document |    ✅    |
+| `getElementsByClassName` | Element, Document |    ✅    |
+| `getElementsByTagName`   | Element, Document |    🔜    |
+| `getElementsByTagNameNS` | Element, Document |    🔜    |
+| `getElementById`         |      Document     |    🔜    |
+| `getElementsByName`      |      Document     |    🔜    |
+| `matches`                |      Element      |    🔜    |
 
 
 Usage
