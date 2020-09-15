@@ -1,7 +1,19 @@
 kagekiri [![build status](https://circleci.com/gh/salesforce/kagekiri.svg?style=svg)](https://circleci.com/gh/salesforce/kagekiri)
 ====
 
-Shadow DOM-piercing `querySelector()` / `querySelectorAll()` implementation.
+Shadow DOM-piercing query APIs
+
+| API                      | Status |
+|--------------------------|:------:|
+| `querySelector`          |   ✅   |
+| `querySelectorAll`       |   ✅   |
+| `getElementsByClassName` |   ✅   |
+| `getElementsByTagName`   |   🚧   |
+| `getElementsByTagNameNS` |   🚧   |
+| `getElementById`         |   🚧   |
+| `getElementsByName`      |   🚧   |
+| `matches`                |   🚧   |
+
 
 Usage
 ---
@@ -19,11 +31,11 @@ import { querySelector, querySelectorAll } from 'kagekiri'
 
 // query the document
 const elements = querySelectorAll('.container button')
-const element = querySelector('.container button')
+const elements = getElementsByClassName('.container button')
 
 // or a specific element
 const elements = querySelectorAll('button', otherElement)
-const element = querySelector('button', otherElement)
+const elements = getElementsByClassName('button', otherElement)
 ```
 
 Example

@@ -224,7 +224,7 @@ function querySelectorAll (selector, context = document) {
 }
 
 function getElementsByClassName (classNames, context = document) {
-  const oneSpaceSeparator = classNames.trim().replace(/\s\s+/g, ' ');
+  const oneSpaceSeparator = classNames.trim().replace(/\s+/g, ' ');
   const classNamesSplit = oneSpaceSeparator.split(' ');
   let selector = "";
   for (let i = 0; i < classNamesSplit.length; i++) {

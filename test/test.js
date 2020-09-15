@@ -936,22 +936,23 @@ describe('basic test suite', function () {
   })
 
   describe('getElementsByClassName', () => {
+    const expected = [
+      {
+        tagName: 'DIV',
+        classList: ['container', 'main']
+      },
+      {
+        tagName: 'SPAN',
+        classList: ['container', 'main', 'outerText']
+      },
+      {
+        tagName: 'SPAN',
+        classList: ['container', 'main', 'innerText']
+      }
+    ]
+
     it('light DOM - getElementsByClassName', () => {
-      const classNames = "container main";
-      const expected = [
-        {
-          tagName: 'DIV',
-          classList: ['container', 'main']
-        },
-        {
-          tagName: 'SPAN',
-          classList: ['container', 'main', 'outerText']
-        },
-        {
-          tagName: 'SPAN',
-          classList: ['container', 'main', 'innerText']
-        }
-      ]
+      const classNames = "container main";  
       withDom(classNamesLight1, context => {
         assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
       })
@@ -959,75 +960,77 @@ describe('basic test suite', function () {
 
     it('shadow DOM - getElementsByClassName', () => {
       const classNames = "container main";
-      const expected = [
-        {
-          tagName: 'DIV',
-          classList: ['container', 'main']
-        },
-        {
-          tagName: 'SPAN',
-          classList: ['container', 'main', 'outerText']
-        },
-        {
-          tagName: 'SPAN',
-          classList: ['container', 'main', 'innerText']
-        }
-      ]
       withDom(classNamesShadow1, context => {
         assertResultEqual(".container.main", getElementsByClassName(classNames, context), expected, true)
       })
     })
 
-    it('light DOM - getElementsByClassName with weird spaces', () => {
-      const expected = [
-        {
-          tagName: 'DIV',
-          classList: ['container', 'main']
-        },
-        {
-          tagName: 'SPAN',
-          classList: ['container', 'main', 'outerText']
-        },
-        {
-          tagName: 'SPAN',
-          classList: ['container', 'main', 'innerText']
-        }
-      ]
+    it('light DOM - getElementsByClassName with multiple spaces', () => {
       withDom(classNamesLight1, context => {
-        let classNames = "container      main";
-        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
-        classNames = `main
-        
-        
-        
-                    container    `;
+        const classNames = "container      main";
         assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
       })
     })
 
-    it('shadow DOM - getElementsByClassName with weird spaces', () => {
-      const expected = [
-        {
-          tagName: 'DIV',
-          classList: ['container', 'main']
-        },
-        {
-          tagName: 'SPAN',
-          classList: ['container', 'main', 'outerText']
-        },
-        {
-          tagName: 'SPAN',
-          classList: ['container', 'main', 'innerText']
-        }
-      ]
-      withDom(classNamesLight1, context => {
-        let classNames = "container      main";
+    it('shadow DOM - getElementsByClassName with multiple spaces', () => {
+      withDom(classNamesShadow1, context => {
+        const classNames = "container      main";
         assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
-        classNames = `main
+      })    
+    })
+
+    it('light DOM - getElementsByClassName with line breaks', () => {
+      withDom(classNamesLight1, context => {
+        const classNames = `main
         
         
         
-                    container    `;
+        container`;
+        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
+      })
+    })
+
+    it('shadow DOM - getElementsByClassName with line breaks', () => {
+      withDom(classNamesShadow1, context => {
+        const classNames = `main
+        
+        
+        
+        container`;
+        assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
+      })
+    })
+
+    it('light DOM - getElementsByClassName with tabs', () => {
+      withDom(classNamesLight1, context => {
+        const classNames = `main	container`;
+        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
+      })
+    })
+
+    it('shadow DOM - getElementsByClassName with tabs', () => {
+      withDom(classNamesShadow1, context => {
+        const classNames = `main	container`;
+        assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
+      })
+    })
+
+    it('light DOM - getElementsByClassName with spaces, line breaks, and tabs', () => {
+      withDom(classNamesLight1, context => {
+        const classNames = `	main	container
+        
+            	
+        `;
+        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
+      })
+    })
+
+    it('shadow DOM - getElementsByClassName with spaces, line breaks, and tabs', () => {
+      withDom(classNamesShadow1, context => {
+        const classNames = `	main	container
+        
+            	
+        `;
         assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
       })
     })
