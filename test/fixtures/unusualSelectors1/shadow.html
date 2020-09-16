@@ -1,0 +1,25 @@
+<!--
+  Copyright (c) 2019, salesforce.com, inc.
+  All rights reserved.
+  SPDX-License-Identifier: BSD-3-Clause
+  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<body>
+  <custom-component class="my-component"></custom-component>
+  <script>
+    class CustomComponent extends HTMLElement {
+      constructor() {
+        super()
+        const shadowRoot = this.attachShadow({ mode: 'open' })
+        shadowRoot.innerHTML = `
+          <div class='double"quote' id='double"quote' data-doublequote='double"quote'></div>
+          <div class="single'quote" id="single'quote" data-singlequote="single'quote"></div>
+          <div class="uni👪code" id="uni👪code" data-uni👪code="uni👪code"></div>
+          <div class="[]bracket{}" id="[]bracket{}" data-bracket="[]bracket{}"></div>
+          <div class="hash#.dot" id="hash#.dot" data-hashdot="hash#.dot"></div>
+        `
+      }
+    }
+    customElements.define('custom-component', CustomComponent)
+  </script>
+</body>
