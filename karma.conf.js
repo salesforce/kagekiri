@@ -7,7 +7,7 @@
 module.exports = function (config) {
   config.set({
     files: [
-      'test/test.js'
+      { pattern: 'test/**/*.spec.js' }
     ],
 
     frameworks: ['mocha'],
@@ -20,7 +20,7 @@ module.exports = function (config) {
     ],
 
     preprocessors: {
-      'test/test.js': ['rollup']
+      'test/**/*.spec.js': ['rollup']
     },
 
     rollupPreprocessor: {
