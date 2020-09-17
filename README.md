@@ -31,11 +31,11 @@ import { querySelector, querySelectorAll } from 'kagekiri'
 
 // query the document
 const elements = querySelectorAll('.container button')
-const elements = getElementsByClassName('.container button')
+const element = querySelector('button')
 
 // or a specific element
 const elements = querySelectorAll('button', otherElement)
-const elements = getElementsByClassName('button', otherElement)
+const element = querySelector('button', otherElement)
 ```
 
 Example
