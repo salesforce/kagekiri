@@ -94,7 +94,7 @@ How it works
 
 Note that it only works on open shadow DOM. Closed shadow DOM cannot be traversed.
 
-Slotted elements are considered to be children of their slots (inside the shadow DOM) rather than children of their host components. If you don't want this behavior, you can use the normal DOM APIs.
+Slotted elements are considered to be children of their slots (inside the shadow DOM) rather than children of their host components. If you don't want this behavior, you can use the normal DOM APIs (e.g. `document.querySelector()` or `document.querySelectorAll()`).
 
 See the tests for full supported CSS features.
 
