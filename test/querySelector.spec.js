@@ -7,7 +7,7 @@
 /* global it describe */
 
 import { querySelectorAll, querySelector } from '../src/index.js'
-import { assertSelectorEqual, withDom, simplifyElement, simplifyElements } from './utils.js'
+import { assertResultEqual, withDom, simplifyElement, simplifyElements } from './utils.js'
 import assert from 'assert'
 import simpleLight1 from './fixtures/simple1/light.html'
 import simpleShadow1 from './fixtures/simple1/shadow.html'
@@ -54,22 +54,22 @@ function testSelectors (lightDom, shadowDom, tests) {
   tests.forEach(({ selector, expected }) => {
     it('light DOM - qSA', () => {
       withDom(lightDom, context => {
-        assertSelectorEqual(selector, context.querySelectorAll(selector), expected, true)
+        assertResultEqual(selector, context.querySelectorAll(selector), expected, true)
       })
     })
     it('shadow DOM - qSA', () => {
       withDom(shadowDom, context => {
-        assertSelectorEqual(selector, querySelectorAll(selector, context), expected, true)
+        assertResultEqual(selector, querySelectorAll(selector, context), expected, true)
       })
     })
     it('light DOM - qS', () => {
       withDom(lightDom, context => {
-        assertSelectorEqual(selector, context.querySelector(selector), expected, false)
+        assertResultEqual(selector, context.querySelector(selector), expected, false)
       })
     })
     it('shadow DOM - qSA', () => {
       withDom(shadowDom, context => {
-        assertSelectorEqual(selector, querySelector(selector, context), expected, false)
+        assertResultEqual(selector, querySelector(selector, context), expected, false)
       })
     })
   })
