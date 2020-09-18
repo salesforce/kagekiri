@@ -1,56 +1,62 @@
+import { assertResultEqual, withDom } from './utils'
+import { getElementsByTagName, getElementsByTagNameNS } from '../src/index.js'
+
 import tagNameLight1 from './fixtures/tagName1/light.html'
 import tagNameShadow1 from './fixtures/tagName1/shadow.html'
 
+function testTagNames(scenario, tagNames, lightDom, shadowDom, expected, expectedShadow) {
+    it(`light DOM - ${scenario}`, () => {
+        withDom(lightDom, context => {
+            assertResultEqual(tagNames, context.getElementsByTagName(tagNames), expected, true);
+        })
+    });
+
+    it(`shadow DOM - ${scenario}`, () => {
+        withDom(shadowDom, context => {
+            if (expectedShadow) {
+                expected = expectedShadow;
+            }
+            assertResultEqual(tagNames, getElementsByTagName(tagNames, context), expected, true);
+        })
+    });
+}
+
+function testTagNamesNS(scenario, namespaceURI, tagNames, lightDom, shadowDom, expected, expectedShadow) {
+    it(`light DOM - ${scenario}`, () => {
+        withDom(lightDom, context => {
+            assertResultEqual(tagNames, context.getElementsByTagNameNS(namespaceURI, tagNames), expected, true);
+        })
+    });
+
+    it(`shadow DOM - ${scenario}`, () => {
+        withDom(shadowDom, context => {
+            if (expectedShadow) {
+                expected = expectedShadow;
+            }
+            assertResultEqual(tagNames, getElementsByTagNameNS(namespaceURI, tagNames, context), expected, true);
+        })
+    });
+}
+
 describe('getElementsByTagName', () => {
-    it('light DOM - handles tag names', () => {
-      const tagName1 = "svg";
-      const expected1 = [
+    const expectedSvg = [
         {
           tagName: 'svg',
           classList: []
         }
-      ]
-      withDom(tagNameLight1, context => {
-        assertResultEqual(tagName1, context.getElementsByTagName(tagName1), expected1, true)
-      })
-      const tagName2 = "span";
-      const expected2 = [
+    ];
+
+    testTagNames('handles tag names', 'svg', tagNameLight1, tagNameShadow1, expectedSvg);
+
+    const expectedSpan = [
         {
           tagName: 'SPAN',
           classList: []
         }
-      ]
-      withDom(tagNameLight1, context => {
-        assertResultEqual(tagName2, context.getElementsByTagName(tagName2), expected2, true)
-      })
-    });
-
-    it('shadow DOM - handles tag names', () => {
-      const tagName1 = "svg";
-      const expected1 = [
-        {
-          tagName: 'svg',
-          classList: []
-        }
-      ]
-      withDom(tagNameShadow1, context => {
-        assertResultEqual(tagName1, getElementsByTagName(tagName1, context), expected1, true)
-      })
-      const tagName2 = "span";
-      const expected2 = [
-        {
-          tagName: 'SPAN',
-          classList: []
-        }
-      ]
-      withDom(tagNameShadow1, context => {
-        assertResultEqual(tagName2, getElementsByTagName(tagName2, context), expected2, true)
-      })
-    });
-
-    it('light DOM - handles wildcards', () => {
-      const tagName = "*";
-      const expected = [
+    ]
+    testTagNames('handles tag names', 'span', tagNameLight1, tagNameShadow1, expectedSpan);
+    
+    const expectedWildcard = [
         {
           tagName: 'HTML',
           classList: []
@@ -107,15 +113,9 @@ describe('getElementsByTagName', () => {
           tagName: 'circle',
           classList: []
         }
-      ]
-      withDom(tagNameLight1, context => {
-        assertResultEqual(tagName, context.getElementsByTagName(tagName), expected, true)
-      })
-    });
+    ];
 
-    it('shadow DOM - handles wildcards', () => {
-      const tagName = "*";
-      const expected = [
+    const expectedWildcardShadow = [
         {
           tagName: 'HEAD',
           classList: []
@@ -172,147 +172,73 @@ describe('getElementsByTagName', () => {
           tagName: 'SCRIPT',
           classList: []
         }
-      ]
-      withDom(tagNameShadow1, context => {
-        assertResultEqual(tagName, getElementsByTagName(tagName, context), expected, true)
-      })
-    });
-
-    it('light DOM - is case insensitive', () => {
-      const tagName = "SpAn";
-      const expected = [
+    ];
+    testTagNames('handles wildcard tag name', '*', tagNameLight1, tagNameShadow1, expectedWildcard, expectedWildcardShadow);
+    
+    const expectedCaseInsensitive = [
         {
-          tagName: 'SPAN',
-          classList: []
+            tagName: 'SPAN',
+            classList: []
         }
-      ]
-      withDom(tagNameLight1, context => {
-        assertResultEqual(tagName, context.getElementsByTagName(tagName), expected, true)
-      })
-    });
-
-    it('shadow DOM - is case insensitive', () => {
-      const tagName = "SpAn";
-      const expected = [
-        {
-          tagName: 'SPAN',
-          classList: []
-        }
-      ]
-      withDom(tagNameShadow1, context => {
-        assertResultEqual(tagName, getElementsByTagName(tagName, context), expected, true)
-      })
-    });
+    ];
+    testTagNames('is case insensitive', 'SpAn', tagNameLight1, tagNameShadow1, expectedCaseInsensitive);
   })
 
   describe('getElementsByTagNameNS', () => {
-    it('light DOM - returns empty with falsy ns', () => {
-      
-    });
+    testTagNamesNS('returns empty with falsy ns', '', '*', tagNameLight1, tagNameShadow1, []);
+    testTagNamesNS('returns empty with falsy ns', false, '*', tagNameLight1, tagNameShadow1, []);
+    testTagNamesNS('returns empty with falsy ns', undefined, '*', tagNameLight1, tagNameShadow1, []);
+    testTagNamesNS('returns empty with falsy ns', null, '*', tagNameLight1, tagNameShadow1, []);
+    testTagNamesNS('returns empty with falsy ns', 0, '*', tagNameLight1, tagNameShadow1, []);
 
-    it('shadow DOM - returns empty with falsy ns', () => {
-      
-    });
-
-    it('light DOM - returns ns matches', () => {
-      const tagName = '*';
-      const namespace = 'http://www.w3.org/2000/svg';
-      const expected = [
+    
+    testTagNamesNS('is case sensitive', '*', 'sPaN', tagNameLight1, tagNameShadow1, []);
+    testTagNamesNS('is case sensitive', '*', 'SPAN', tagNameLight1, tagNameShadow1, []);
+    const expectedCaseSensitive = [
         {
-          tagName: 'svg',
-          classList: []
-        },
-        {
-          tagName: 'defs',
-          classList: []
-        },
-        {
-          tagName: 'linearGradient',
-          classList: []
-        },
-        {
-          tagName: 'stop',
-          classList: []
-        },
-        {
-          tagName: 'stop',
-          classList: []
-        },
-        {
-          tagName: 'circle',
-          classList: []
+            tagName: 'SPAN',
+            classList: []
         }
-      ]
-      withDom(tagNameLight1, context => {
-        assertResultEqual(tagName, context.getElementsByTagNameNS(namespace, tagName), expected, true)
-      })
-    });
+    ];
+    testTagNamesNS('is case sensitive', '*', 'span', tagNameLight2, tagNameShadow2, expectedCaseSensitive);
 
-    it('shadow DOM - returns ns matches', () => {
-      const tagName = '*';
-      const namespace = 'http://www.w3.org/2000/svg';
-      const expected = [
+    const expectedNSMatches = [
         {
-          tagName: 'svg',
-          classList: []
+            tagName: 'svg',
+            classList: []
         },
         {
-          tagName: 'defs',
-          classList: []
+            tagName: 'defs',
+            classList: []
         },
         {
-          tagName: 'linearGradient',
-          classList: []
+            tagName: 'linearGradient',
+            classList: []
         },
         {
-          tagName: 'stop',
-          classList: []
+            tagName: 'stop',
+            classList: []
         },
         {
-          tagName: 'stop',
-          classList: []
+            tagName: 'stop',
+            classList: []
         },
         {
-          tagName: 'circle',
-          classList: []
+            tagName: 'circle',
+            classList: []
         }
-      ]
-      withDom(tagNameShadow1, context => {
-        assertResultEqual(tagName, getElementsByTagNameNS(namespace, tagName, context), expected, true)
-      })
-    });
+    ];
+    testTagNamesNS('returns ns matches', 'http://www.w3.org/2000/svg', '*', tagNameLight1, tagNameShadow1, expectedNSMatches);
 
-    it('light DOM - wildcard ns', () => {
-      const tagName = 'span';
-      const namespace = '*';
-      const expected = [
+    const expectedSpan = [
         {
           tagName: 'SPAN',
           classList: []
         }
       ]
-      withDom(tagNameLight1, context => {
-        assertResultEqual(tagName, context.getElementsByTagNameNS(namespace, tagName), expected, true)
-      })
-    });
+    testTagNamesNS('handles wildcard namespace', '*', 'span', tagNameLight1, tagNameShadow1, expectedSpan);
 
-    it('shadow DOM - wildcard ns', () => {
-      const tagName = 'span';
-      const namespace = '*';
-      const expected = [
-        {
-          tagName: 'SPAN',
-          classList: []
-        }
-      ]
-      withDom(tagNameShadow1, context => {
-        assertResultEqual(tagName, getElementsByTagNameNS(namespace, tagName, context), expected, true)
-      })
-    });
-
-    it('light DOM - wildcard tagName', () => {
-      const tagName = "*";
-      const expected = [
+    const expectedWildcard = [
         {
           tagName: 'HTML',
           classList: []
@@ -345,15 +271,9 @@ describe('getElementsByTagName', () => {
           tagName: 'SPAN',
           classList: []
         }
-      ]
-      withDom(tagNameLight1, context => {
-        assertResultEqual(tagName, context.getElementsByTagNameNS('http://www.w3.org/1999/xhtml', tagName), expected, true)
-      })
-    });
+    ];
 
-    it('shadow DOM - wildcard tagName', () => {
-      const tagName = "*";
-      const expected = [
+    const expectedWildcardShadow = [
         {
           tagName: 'HEAD',
           classList: []
@@ -386,9 +306,7 @@ describe('getElementsByTagName', () => {
           tagName: 'SCRIPT',
           classList: []
         }
-      ]
-      withDom(tagNameShadow1, context => {
-        assertResultEqual(tagName, getElementsByTagNameNS('http://www.w3.org/1999/xhtml', tagName, context), expected, true)
-      })
-    });
+    ];
+    
+    testTagNamesNS('handles wildcard tagName', 'http://www.w3.org/1999/xhtml', '*', tagNameLight1, tagNameShadow1, expectedWildcard, expectedWildcardShadow)
   })
