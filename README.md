@@ -31,7 +31,7 @@ import { querySelector, querySelectorAll } from 'kagekiri'
 
 // query the document
 const elements = querySelectorAll('.container button')
-const element = querySelector('button')
+const element = querySelector('.container button')
 
 // or a specific element
 const elements = querySelectorAll('button', otherElement)
