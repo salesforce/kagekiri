@@ -251,6 +251,17 @@ function getMatchingElementsByClassName (elementIterator, classNames) {
   return results
 }
 
+function getMatchingElementById (elementIterator, id) {
+  let element
+  while ((element = elementIterator.next())) {
+    if (element.id === id) {
+      return element
+    }
+  }
+
+  return null
+}
+
 // For convenience, attach the source to all pseudo selectors.
 // We need this later, and it's easier than passing the selector into every function.
 function attachSourceIfNecessary ({ nodes }, selector) {
@@ -307,7 +318,7 @@ function getElementsByClassName (classNames, context = document) {
 
 function getElementById (id) {
   const elementIterator = new ElementIterator(document)
-  return getMatchingElementById(elementIterator)
+  return getMatchingElementById(elementIterator, id)
 }
 
 export {
