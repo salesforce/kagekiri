@@ -207,10 +207,12 @@ function getMatchingElementsByTagNameNS (elementIterator, namespaceURI, tagName)
     return results;
   }
   let element
+  
   while ((element = elementIterator.next())) {
 
+    const match = element.outerHTML.match(/^<\s*([\w-]+)/);
     // tagName supports a wildcard parameter 
-    if(tagName.toLowerCase() === element.tagName.toLowerCase() || tagName === '*') {
+    if((match && tagName === match[1]) || tagName === '*') {
       // namespace supports a wildcard parameter
       if(element.namespaceURI === namespaceURI || namespaceURI === '*') {
         results.push(element);
