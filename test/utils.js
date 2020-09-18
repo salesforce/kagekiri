@@ -10,7 +10,7 @@ export function withDom (html, cb) {
   try {
     cb(iframeDocument)
   } finally {
-      document.body.removeChild(iframe)
+    document.body.removeChild(iframe)
   }
 }
 
