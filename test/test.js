@@ -48,10 +48,8 @@ import nestedSlotsLight7 from './fixtures/nestedSlots7/light.html'
 import nestedSlotsShadow7 from './fixtures/nestedSlots7/shadow.html'
 import unusualSelectorsLight1 from './fixtures/unusualSelectors1/light.html'
 import unusualSelectorsShadow1 from './fixtures/unusualSelectors1/shadow.html'
-import classNamesLight1 from './fixtures/classNames1/light.html';
-import classNamesShadow1 from './fixtures/classNames1/shadow.html';
-import classNamesLight2 from './fixtures/classNames2/light.html';
-import classNamesShadow2 from './fixtures/classNames2/shadow.html';
+import classNamesLight1 from './fixtures/classNames1/light.html'
+import classNamesShadow1 from './fixtures/classNames1/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -952,31 +950,31 @@ describe('basic test suite', function () {
     ]
 
     it('light DOM - getElementsByClassName', () => {
-      const classNames = "container main";  
+      const classNames = 'container main'
       withDom(classNamesLight1, context => {
         assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
       })
     })
 
     it('shadow DOM - getElementsByClassName', () => {
-      const classNames = "container main";
+      const classNames = 'container main'
       withDom(classNamesShadow1, context => {
-        assertResultEqual(".container.main", getElementsByClassName(classNames, context), expected, true)
+        assertResultEqual('.container.main', getElementsByClassName(classNames, context), expected, true)
       })
     })
 
     it('light DOM - getElementsByClassName with multiple spaces', () => {
       withDom(classNamesLight1, context => {
-        const classNames = "container      main";
+        const classNames = 'container      main'
         assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
       })
     })
 
     it('shadow DOM - getElementsByClassName with multiple spaces', () => {
       withDom(classNamesShadow1, context => {
-        const classNames = "container      main";
+        const classNames = 'container      main'
         assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
-      })    
+      })
     })
 
     it('light DOM - getElementsByClassName with line breaks', () => {
@@ -985,7 +983,7 @@ describe('basic test suite', function () {
         
         
         
-        container`;
+        container`
         assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
       })
     })
@@ -996,21 +994,23 @@ describe('basic test suite', function () {
         
         
         
-        container`;
+        container`
         assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
       })
     })
 
+    /* eslint-disable no-tabs */
+
     it('light DOM - getElementsByClassName with tabs', () => {
       withDom(classNamesLight1, context => {
-        const classNames = `main	container`;
+        const classNames = 'main	container'
         assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
       })
     })
 
     it('shadow DOM - getElementsByClassName with tabs', () => {
       withDom(classNamesShadow1, context => {
-        const classNames = `main	container`;
+        const classNames = 'main	container'
         assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
       })
     })
@@ -1020,7 +1020,7 @@ describe('basic test suite', function () {
         const classNames = `	main	container
         
             	
-        `;
+        `
         assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
       })
     })
@@ -1030,9 +1030,11 @@ describe('basic test suite', function () {
         const classNames = `	main	container
         
             	
-        `;
+        `
         assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
       })
     })
+
+    /* eslint-enable no-tabs */
   })
 })
