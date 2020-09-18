@@ -50,8 +50,6 @@ import unusualSelectorsLight1 from './fixtures/unusualSelectors1/light.html'
 import unusualSelectorsShadow1 from './fixtures/unusualSelectors1/shadow.html'
 import classNamesLight1 from './fixtures/classNames1/light.html'
 import classNamesShadow1 from './fixtures/classNames1/shadow.html'
-import classNamesLight2 from './fixtures/classNames2/light.html'
-import classNamesShadow2 from './fixtures/classNames2/shadow.html'
 
 function withDom (html, cb) {
   const iframe = document.createElement('iframe')
@@ -1001,6 +999,8 @@ describe('basic test suite', function () {
       })
     })
 
+    /* eslint-disable no-tabs */
+
     it('light DOM - getElementsByClassName with tabs', () => {
       withDom(classNamesLight1, context => {
         const classNames = 'main	container'
@@ -1034,5 +1034,7 @@ describe('basic test suite', function () {
         assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
       })
     })
+
+    /* eslint-enable no-tabs */
   })
 })
