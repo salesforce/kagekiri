@@ -186,14 +186,14 @@ function getMatchingElements (elementIterator, ast, multiple) {
 }
 
 function getMatchingElementsByClassName (elementIterator, classNames) {
-  const results = [];
+  const results = []
   let element
 
   while ((element = elementIterator.next())) {
-    const elementClassList = element.classList;
-    const contains = classNames.every(function(className) {
-      return elementClassList.contains(className);
-    });
+    const elementClassList = element.classList
+    const contains = classNames.every(function (className) {
+      return elementClassList.contains(className)
+    })
     if (contains) {
       results.push(element)
     }
@@ -241,7 +241,7 @@ function querySelectorAll (selector, context = document) {
 
 function getElementsByClassName (classNames, context = document) {
   const elementIterator = new ElementIterator(context)
-  const classNamesSplit = classNames.trim().split(/\s+/);
+  const classNamesSplit = classNames.trim().split(/\s+/)
   return getMatchingElementsByClassName(elementIterator, classNamesSplit, context)
 }
 
