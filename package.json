@@ -36,11 +36,13 @@
     "@rollup/plugin-node-resolve": "^9.0.0",
     "assert": "^2.0.0",
     "bundlesize": "^0.18.0",
+    "husky": "^4.3.0",
     "karma": "^5.2.2",
     "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^1.3.0",
     "karma-mocha": "^2.0.1",
     "karma-rollup-preprocessor": "^7.0.5",
+    "lint-staged": "^10.4.0",
     "mocha": "^8.1.3",
     "object-assign": "^4.1.1",
     "postcss-selector-parser": "nolanlawson/postcss-selector-parser#util-deprecate",
@@ -71,5 +73,13 @@
       "maxSize": "55 kB",
       "compression": "none"
     }
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.js": "standard --fix"
+  }
 }
