@@ -185,14 +185,10 @@ function getMatchingElements (elementIterator, ast, multiple) {
   return results
 }
 
-/**
- * https://dom.spec.whatwg.org/#concept-getelementsbytagnamens
- */
 function getMatchingElementsByTagName (elementIterator, tagName) {
   const results = [];
   let element
   while ((element = elementIterator.next())) {
-    // case insensitive matching differs from browser behavior due to 10 year old bugs in browser
     if(tagName.toLowerCase() === element.tagName.toLowerCase() || tagName === '*') {
       results.push(element);
     }
@@ -214,7 +210,6 @@ function getMatchingElementsByTagNameNS (elementIterator, namespaceURI, tagName)
   while ((element = elementIterator.next())) {
 
     // tagName supports a wildcard parameter 
-    // case insensitive matching differs from browser behavior due to 10 year old bugs in browser
     if(tagName.toLowerCase() === element.tagName.toLowerCase() || tagName === '*') {
       // namespace supports a wildcard parameter
       if(element.namespaceURI === namespaceURI || namespaceURI === '*') {
