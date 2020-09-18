@@ -205,6 +205,17 @@ function getMatchingElementsByTagName (elementIterator, tagName) {
   return results
 }
 
+function getMatchingElementsByName (elementIterator, name) {
+  const results = []
+  let element
+  while ((element = elementIterator.next())) {
+    if (element.name === name) {
+      results.push(element)
+    }
+  }
+  return results
+}
+
 /**
  * https://dom.spec.whatwg.org/#concept-getelementsbytagnamens
  */
@@ -324,11 +335,17 @@ function getElementById (id, context = document) {
   return getMatchingElementById(elementIterator, id)
 }
 
+function getElementsByName (name) {
+  const elementIterator = new ElementIterator(document)
+  return getMatchingElementsByName(elementIterator, name)
+}
+
 export {
   querySelectorAll,
   querySelector,
   getElementsByTagName,
   getElementsByTagNameNS,
   getElementsByClassName,
-  getElementById
+  getElementById,
+  getElementsByName
 }
