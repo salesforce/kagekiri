@@ -81,5 +81,10 @@
   },
   "lint-staged": {
     "**/*.js": "standard --fix"
+  },
+  "standard": {
+    "ignore": [
+      "types/"
+    ]
   }
 }
