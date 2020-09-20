@@ -186,11 +186,11 @@ function getMatchingElements (elementIterator, ast, multiple) {
 }
 
 function getMatchingElementsByTagName (elementIterator, tagName) {
-  const results = [];
+  const results = []
   let element
   while ((element = elementIterator.next())) {
-    if(tagName.toLowerCase() === element.tagName.toLowerCase() || tagName === '*') {
-      results.push(element);
+    if (tagName.toLowerCase() === element.tagName.toLowerCase() || tagName === '*') {
+      results.push(element)
     }
   }
   return results
@@ -200,22 +200,26 @@ function getMatchingElementsByTagName (elementIterator, tagName) {
  * https://dom.spec.whatwg.org/#concept-getelementsbytagnamens
  */
 function getMatchingElementsByTagNameNS (elementIterator, namespaceURI, tagName) {
-  const results = [];
+  const results = []
   // exit early if null, empty string or undefined is provided
   // these will not match the element namespace
   if (!namespaceURI) {
-    return results;
+    return results
   }
   let element
-  
-  while ((element = elementIterator.next())) {
 
-    const match = element.outerHTML.match(/^<\s*([\w-]+)/);
-    // tagName supports a wildcard parameter 
-    if((match && tagName === match[1]) || tagName === '*') {
+  while ((element = elementIterator.next())) {
+    // we'll do a case insensitive match to find out where the tag name is
+    const outerHTMLAsUppercase = element.outerHTML.toUpperCase()
+    // we are not not guaranteed to have an uppercase element.tagName, eg: svg elements
+    const index = outerHTMLAsUppercase.indexOf(element.tagName.toUpperCase())
+    // now we can get the original, non-uppercased tag name
+    const originalTagName = element.outerHTML.substr(index, element.tagName.length)
+    // tagName supports a wildcard parameter
+    if (tagName === originalTagName || tagName === '*') {
       // namespace supports a wildcard parameter
-      if(element.namespaceURI === namespaceURI || namespaceURI === '*') {
-        results.push(element);
+      if (element.namespaceURI === namespaceURI || namespaceURI === '*') {
+        results.push(element)
       }
     }
   }

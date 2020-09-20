@@ -48,9 +48,6 @@ import nestedSlotsShadow6 from './fixtures/nestedSlots6/shadow.html'
 import nestedSlotsLight7 from './fixtures/nestedSlots7/light.html'
 import nestedSlotsShadow7 from './fixtures/nestedSlots7/shadow.html'
 
-
-
-
 function testSelectors (lightDom, shadowDom, tests) {
   tests.forEach(({ selector, expected }) => {
     it('light DOM - qSA', () => {
