@@ -6,7 +6,8 @@
  */
 /* global it describe */
 
-import { querySelectorAll, querySelector, getElementsByClassName } from '../src/index.js'
+import { querySelectorAll, querySelector } from '../src/index.js'
+import { assertResultEqual, withDom, simplifyElement, simplifyElements } from './utils.js'
 import assert from 'assert'
 import simpleLight1 from './fixtures/simple1/light.html'
 import simpleShadow1 from './fixtures/simple1/shadow.html'
@@ -48,54 +49,6 @@ import nestedSlotsLight7 from './fixtures/nestedSlots7/light.html'
 import nestedSlotsShadow7 from './fixtures/nestedSlots7/shadow.html'
 import unusualSelectorsLight1 from './fixtures/unusualSelectors1/light.html'
 import unusualSelectorsShadow1 from './fixtures/unusualSelectors1/shadow.html'
-import classNamesLight1 from './fixtures/classNames1/light.html'
-import classNamesShadow1 from './fixtures/classNames1/shadow.html'
-
-function withDom (html, cb) {
-  const iframe = document.createElement('iframe')
-  document.body.appendChild(iframe)
-  const iframeDocument = iframe.contentWindow.document
-  iframeDocument.open('text/html', 'replace')
-  iframeDocument.write(html)
-  iframeDocument.close()
-  try {
-    cb(iframeDocument)
-  } finally {
-    document.body.removeChild(iframe)
-  }
-}
-
-function simplifyElement (element) {
-  if (!element) {
-    return undefined
-  }
-  return {
-    tagName: element.tagName,
-    classList: [...element.classList]
-  }
-}
-
-function simplifyElements (elements) {
-  return [...elements].map(simplifyElement)
-}
-
-function stringify (obj) {
-  if (typeof obj === 'undefined') {
-    return obj
-  }
-  return JSON.stringify(obj)
-}
-
-function assertResultEqual (selector, actual, expected, returnsCollection) {
-  if (returnsCollection) {
-    actual = simplifyElements(actual)
-  } else {
-    actual = simplifyElement(actual)
-    expected = expected[0]
-  }
-  assert.deepStrictEqual(actual, expected,
-    `Selector failed: ${stringify(selector)}, ${stringify(actual)} !== ${stringify(expected)}`)
-}
 
 function testSelectors (lightDom, shadowDom, tests) {
   tests.forEach(({ selector, expected }) => {
@@ -931,110 +884,5 @@ describe('basic test suite', function () {
       { selector: '[data-hashdot="hash\\#\\.dot"]', expected: hashDot },
       { selector: "[data-hashdot='hash\\#\\.dot']", expected: hashDot }
     ])
-  })
-
-  describe('getElementsByClassName', () => {
-    const expected = [
-      {
-        tagName: 'DIV',
-        classList: ['container', 'main']
-      },
-      {
-        tagName: 'SPAN',
-        classList: ['container', 'main', 'outerText']
-      },
-      {
-        tagName: 'SPAN',
-        classList: ['container', 'main', 'innerText']
-      }
-    ]
-
-    it('light DOM - getElementsByClassName', () => {
-      const classNames = 'container main'
-      withDom(classNamesLight1, context => {
-        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
-      })
-    })
-
-    it('shadow DOM - getElementsByClassName', () => {
-      const classNames = 'container main'
-      withDom(classNamesShadow1, context => {
-        assertResultEqual('.container.main', getElementsByClassName(classNames, context), expected, true)
-      })
-    })
-
-    it('light DOM - getElementsByClassName with multiple spaces', () => {
-      withDom(classNamesLight1, context => {
-        const classNames = 'container      main'
-        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
-      })
-    })
-
-    it('shadow DOM - getElementsByClassName with multiple spaces', () => {
-      withDom(classNamesShadow1, context => {
-        const classNames = 'container      main'
-        assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
-      })
-    })
-
-    it('light DOM - getElementsByClassName with line breaks', () => {
-      withDom(classNamesLight1, context => {
-        const classNames = `main
-        
-        
-        
-        container`
-        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
-      })
-    })
-
-    it('shadow DOM - getElementsByClassName with line breaks', () => {
-      withDom(classNamesShadow1, context => {
-        const classNames = `main
-        
-        
-        
-        container`
-        assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
-      })
-    })
-
-    /* eslint-disable no-tabs */
-
-    it('light DOM - getElementsByClassName with tabs', () => {
-      withDom(classNamesLight1, context => {
-        const classNames = 'main	container'
-        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
-      })
-    })
-
-    it('shadow DOM - getElementsByClassName with tabs', () => {
-      withDom(classNamesShadow1, context => {
-        const classNames = 'main	container'
-        assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
-      })
-    })
-
-    it('light DOM - getElementsByClassName with spaces, line breaks, and tabs', () => {
-      withDom(classNamesLight1, context => {
-        const classNames = `	main	container
-        
-            	
-        `
-        assertResultEqual(classNames, context.getElementsByClassName(classNames), expected, true)
-      })
-    })
-
-    it('shadow DOM - getElementsByClassName with spaces, line breaks, and tabs', () => {
-      withDom(classNamesShadow1, context => {
-        const classNames = `	main	container
-        
-            	
-        `
-        assertResultEqual(classNames, getElementsByClassName(classNames, context), expected, true)
-      })
-    })
-
-    /* eslint-enable no-tabs */
   })
 })
