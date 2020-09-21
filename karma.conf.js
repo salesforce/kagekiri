@@ -16,11 +16,31 @@ module.exports = function (config) {
       require('karma-rollup-preprocessor'),
       require('karma-mocha'),
       require('karma-chrome-launcher'),
-      require('karma-firefox-launcher')
+      require('karma-firefox-launcher'),
+      require('karma-coverage')
     ],
+
+    reporters: ['progress', 'coverage'],
 
     preprocessors: {
       'test/**/*.spec.js': ['rollup']
+    },
+
+    coverageReporter: {
+      dir: 'coverage',
+      reporters: [
+        { type: 'html', subdir: 'report-html' },
+        { type: 'lcov', subdir: 'report-lcov' },
+        { type: 'text', subdir: 'report-text' }
+      ],
+      check: {
+        global: {
+          statements: 100,
+          branches: 91,
+          functions: 100,
+          lines: 100
+        }
+      }
     },
 
     rollupPreprocessor: {
@@ -33,6 +53,9 @@ module.exports = function (config) {
         require('rollup-plugin-node-globals')(),
         require('rollup-plugin-string').string({
           include: '**/*.html'
+        }),
+        require('rollup-plugin-istanbul')({
+          exclude: ['**/test/**', '**/node_modules/**']
         })
       ],
       output: {

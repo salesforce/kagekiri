@@ -12,7 +12,8 @@ import 'string.prototype.endswith'
 import postcssSelectorParser from 'postcss-selector-parser'
 
 // IE11 does not have Element.prototype.matches, we can use msMatchesSelector.
-const nativeMatches = Element.prototype.matches || Element.prototype.msMatchesSelector
+// This is ignored for code coverage because we don't run code coverage in IE.
+const nativeMatches = Element.prototype.matches || /* istanbul ignore next */ Element.prototype.msMatchesSelector
 
 function getChildren (node) {
   if (node.documentElement) { // document
@@ -40,6 +41,10 @@ class ElementIterator {
     const node = this._queue.pop()
     if (node) {
       const children = getChildren(node)
+      // In IE, children may be undefined if the `node` is the document.
+      // We don't run coverage tests for IE, so it's ignored.
+      // See: https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children#Browser_compatibility
+      /* istanbul ignore else */
       if (children) {
         for (let i = children.length - 1; i >= 0; i--) {
           this._queue.push(children[i])
