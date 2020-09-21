@@ -6,7 +6,7 @@
  */
 /* global it describe */
 
-import { assertResultEqual, withDom } from './utils'
+import { assertResultEqual, withDom } from './utils.js'
 import { getElementsByTagName, getElementsByTagNameNS } from '../src/index.js'
 
 import tagNameLight1 from './fixtures/tagName1/light.html'

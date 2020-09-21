@@ -7,7 +7,7 @@
 /* global it describe */
 
 import { querySelectorAll, querySelector } from '../src/index.js'
-import { assertResultEqual, withDom, simplifyElement, simplifyElements } from './utils'
+import { assertResultEqual, withDom, simplifyElement, simplifyElements } from './utils.js'
 import assert from 'assert'
 import simpleLight1 from './fixtures/simple1/light.html'
 import simpleShadow1 from './fixtures/simple1/shadow.html'
@@ -47,6 +47,8 @@ import nestedSlotsLight6 from './fixtures/nestedSlots6/light.html'
 import nestedSlotsShadow6 from './fixtures/nestedSlots6/shadow.html'
 import nestedSlotsLight7 from './fixtures/nestedSlots7/light.html'
 import nestedSlotsShadow7 from './fixtures/nestedSlots7/shadow.html'
+import unusualSelectorsLight1 from './fixtures/unusualSelectors1/light.html'
+import unusualSelectorsShadow1 from './fixtures/unusualSelectors1/shadow.html'
 
 function testSelectors (lightDom, shadowDom, tests) {
   tests.forEach(({ selector, expected }) => {
@@ -846,5 +848,41 @@ describe('basic test suite', function () {
 
     withDom(simpleLight1, test(true))
     withDom(simpleShadow1, test(false))
+  })
+
+  describe('unusual selectors', () => {
+    const singleQuote = [{ tagName: 'DIV', classList: ["single'quote"] }]
+    const doubleQuote = [{ tagName: 'DIV', classList: ['double"quote'] }]
+    const unicode = [{ tagName: 'DIV', classList: ['uni👪code'] }]
+    const bracket = [{ tagName: 'DIV', classList: ['[]bracket{}'] }]
+    const hashDot = [{ tagName: 'DIV', classList: ['hash#.dot'] }]
+
+    testSelectors(unusualSelectorsLight1, unusualSelectorsShadow1, [
+      { selector: ".single\\'quote", expected: singleQuote },
+      { selector: "#single\\'quote", expected: singleQuote },
+      { selector: "[data-singlequote=\"single\\'quote\"]", expected: singleQuote },
+      { selector: "[data-singlequote='single\\'quote']", expected: singleQuote },
+
+      { selector: '.double\\"quote', expected: doubleQuote },
+      { selector: '#double\\"quote', expected: doubleQuote },
+      { selector: '[data-doublequote=\'double\\"quote\']', expected: doubleQuote },
+      { selector: '[data-doublequote="double\\"quote"]', expected: doubleQuote },
+
+      { selector: '.uni👪code', expected: unicode },
+      { selector: '#uni👪code', expected: unicode },
+      { selector: '[data-uni👪code]', expected: unicode },
+      { selector: '[data-uni👪code="uni👪code"]', expected: unicode },
+      { selector: "[data-uni👪code='uni👪code']", expected: unicode },
+
+      { selector: '.\\[\\]bracket\\{\\}', expected: bracket },
+      { selector: '#\\[\\]bracket\\{\\}', expected: bracket },
+      { selector: '[data-bracket="\\[\\]bracket\\{\\}"]', expected: bracket },
+      { selector: "[data-bracket='\\[\\]bracket\\{\\}']", expected: bracket },
+
+      { selector: '.hash\\#\\.dot', expected: hashDot },
+      { selector: '#hash\\#\\.dot', expected: hashDot },
+      { selector: '[data-hashdot="hash\\#\\.dot"]', expected: hashDot },
+      { selector: "[data-hashdot='hash\\#\\.dot']", expected: hashDot }
+    ])
   })
 })

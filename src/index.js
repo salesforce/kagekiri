@@ -226,6 +226,22 @@ function getMatchingElementsByTagNameNS (elementIterator, namespaceURI, tagName)
   return results
 }
 
+function getMatchingElementsByClassName (elementIterator, classNames) {
+  const results = []
+  let element
+
+  while ((element = elementIterator.next())) {
+    const elementClassList = element.classList
+    const contains = classNames.every(function (className) {
+      return elementClassList.contains(className)
+    })
+    if (contains) {
+      results.push(element)
+    }
+  }
+  return results
+}
+
 // For convenience, attach the source to all pseudo selectors.
 // We need this later, and it's easier than passing the selector into every function.
 function attachSourceIfNecessary ({ nodes }, selector) {
@@ -274,9 +290,16 @@ function querySelectorAll (selector, context = document) {
   return query(selector, context, true)
 }
 
+function getElementsByClassName (classNames, context = document) {
+  const elementIterator = new ElementIterator(context)
+  const classNamesSplit = classNames.trim().split(/\s+/)
+  return getMatchingElementsByClassName(elementIterator, classNamesSplit, context)
+}
+
 export {
   querySelectorAll,
   querySelector,
   getElementsByTagName,
-  getElementsByTagNameNS
+  getElementsByTagNameNS,
+  getElementsByClassName
 }

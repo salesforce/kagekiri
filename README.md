@@ -1,7 +1,19 @@
 kagekiri [![build status](https://circleci.com/gh/salesforce/kagekiri.svg?style=svg)](https://circleci.com/gh/salesforce/kagekiri)
 ====
 
-Shadow DOM-piercing `querySelector()` / `querySelectorAll()` implementation.
+Shadow DOM-piercing query APIs. Supports:
+
+| API                      |     Interface     | Support |
+|--------------------------|-------------------|:------:|
+| `querySelector`          | Element, Document |    ✅    |
+| `querySelectorAll`       | Element, Document |    ✅    |
+| `getElementsByClassName` | Element, Document |    ✅    |
+| `getElementsByTagName`   | Element, Document |    🔜    |
+| `getElementsByTagNameNS` | Element, Document |    🔜    |
+| `getElementById`         |      Document     |    🔜    |
+| `getElementsByName`      |      Document     |    🔜    |
+| `matches`                |      Element      |    🔜    |
+
 
 Usage
 ---
@@ -82,7 +94,7 @@ How it works
 
 Note that it only works on open shadow DOM. Closed shadow DOM cannot be traversed.
 
-Slotted elements are considered to be children of their slots (inside the shadow DOM) rather than children of their host components. If you don't want this behavior, you can use the normal `querySelector()`/`querySelectorAll()` API.
+Slotted elements are considered to be children of their slots (inside the shadow DOM) rather than children of their host components. If you don't want this behavior, you can use the normal DOM APIs (e.g. `document.querySelector()` or `document.querySelectorAll()`).
 
 See the tests for full supported CSS features.
 

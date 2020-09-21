@@ -1,0 +1,47 @@
+<!--
+  Copyright (c) 2019, salesforce.com, inc.
+  All rights reserved.
+  SPDX-License-Identifier: BSD-3-Clause
+  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<body>
+  <div class="container main"></div>
+    <script>
+      class OuterComponent extends HTMLElement {
+        constructor() {
+          super()
+          const shadowRoot = this.attachShadow({mode: 'open'})
+          shadowRoot.innerHTML = `
+                <div class="wrapper">
+                    <span class="container main outerText">Hello</spam>
+                </div>`
+        }
+    
+        connectedCallback() {
+          this.setAttribute('class', 'outer')
+          this.shadowRoot.querySelector('.wrapper').appendChild(new InnerComponent())
+        }
+      }
+    
+      class InnerComponent extends HTMLElement {
+        constructor () {
+          super()
+          const shadowRoot = this.attachShadow({mode: 'open'})
+          shadowRoot.innerHTML = `
+          <div class="wrapper">
+            <span class="container main innerText">Hello Inner</span>
+          </div>`
+        }
+    
+        connectedCallback() {
+          this.setAttribute('class', 'inner')
+        }
+      }
+    
+      customElements.define('outer-component', OuterComponent)
+      customElements.define('inner-component', InnerComponent)
+    
+      document.querySelector('.container').appendChild(new OuterComponent())
+    </script>
+    </body>
+    

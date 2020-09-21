@@ -14,6 +14,17 @@ export function withDom (html, cb) {
   }
 }
 
+export function assertResultEqual (selector, actual, expected, qsa) {
+  if (qsa) {
+    actual = simplifyElements(actual)
+  } else {
+    actual = simplifyElement(actual)
+    expected = expected[0]
+  }
+  assert.deepStrictEqual(actual, expected,
+      `Selector failed: ${stringify(selector)}, ${stringify(actual)} !== ${stringify(expected)}`)
+}
+
 export function simplifyElement (element) {
   if (!element) {
     return undefined
@@ -33,15 +44,4 @@ function stringify (obj) {
     return obj
   }
   return JSON.stringify(obj)
-}
-
-export function assertResultEqual (selector, actual, expected, qsa) {
-  if (qsa) {
-    actual = simplifyElements(actual)
-  } else {
-    actual = simplifyElement(actual)
-    expected = expected[0]
-  }
-  assert.deepStrictEqual(actual, expected,
-      `Selector failed: ${stringify(selector)}, ${stringify(actual)} !== ${stringify(expected)}`)
 }
