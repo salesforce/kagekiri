@@ -193,8 +193,9 @@ function getMatchingElements (elementIterator, ast, multiple) {
 function getMatchingElementsByTagName (elementIterator, tagName) {
   const results = []
   let element
+  const tagNameAsLowerCase = tagName.toLowerCase()
   while ((element = elementIterator.next())) {
-    if (tagName.toLowerCase() === element.tagName.toLowerCase() || tagName === '*') {
+    if (tagName === '*' || tagNameAsLowerCase === element.tagName.toLowerCase()) {
       results.push(element)
     }
   }
