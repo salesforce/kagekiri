@@ -221,11 +221,11 @@ function getMatchingElementsByTagNameNS (elementIterator, namespaceURI, tagName)
     // now we can get the original, non-uppercased tag name
     const originalTagName = element.outerHTML.substr(index, element.tagName.length)
     // tagName supports a wildcard parameter
-    if (tagName === originalTagName || tagName === '*') {
-      // namespace supports a wildcard parameter
-      if (element.namespaceURI === namespaceURI || namespaceURI === '*') {
-        results.push(element)
-      }
+    const tagMatches = tagName === originalTagName || tagName === '*'
+    // namespace supports a wildcard parameter
+    const namespaceMatches = element.namespaceURI === namespaceURI || namespaceURI === '*'
+    if (tagMatches && namespaceMatches) {
+      results.push(element)
     }
   }
   return results
