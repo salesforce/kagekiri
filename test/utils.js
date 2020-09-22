@@ -29,7 +29,7 @@ export function assertResultEqual (selector, actual, expected, qsa) {
     expected = expected[0]
   }
   assert.deepStrictEqual(actual, expected,
-    `Selector failed: ${stringify(selector)}, ${stringify(actual)} !== ${stringify(expected)}`)
+      `Selector failed: ${stringify(selector)}, ${stringify(actual)} !== ${stringify(expected)}`)
 }
 
 export function simplifyElement (element) {

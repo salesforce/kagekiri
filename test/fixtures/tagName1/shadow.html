@@ -1,0 +1,49 @@
+<!--
+  Copyright (c) 2019, salesforce.com, inc.
+  All rights reserved.
+  SPDX-License-Identifier: BSD-3-Clause
+  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<body>
+<div class="container"></div>
+<script>
+  class OuterComponent extends HTMLElement {
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `
+            <div class="wrapper">
+            </div>`
+    }
+
+    connectedCallback() {
+      this.shadowRoot.querySelector('.wrapper').appendChild(new InnerComponent())
+    }
+  }
+
+  class InnerComponent extends HTMLElement {
+    constructor () {
+      super()
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `
+        <span>Hello!</span>
+        <svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <defs>
+            <linearGradient id="myGradient" gradientTransform="rotate(90)">
+              <stop offset="5%"  stop-color="gold" />
+              <stop offset="95%" stop-color="red" />
+            </linearGradient>
+          </defs>
+ 
+          <!-- using my linear gradient -->
+          <circle cx="5" cy="5" r="4" fill="url('#myGradient')" />
+        </svg>`;
+    }
+  }
+
+  customElements.define('outer-component', OuterComponent)
+  customElements.define('inner-component', InnerComponent)
+
+  document.querySelector('.container').appendChild(new OuterComponent())
+</script>
+</body>

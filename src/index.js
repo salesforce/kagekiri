@@ -190,6 +190,48 @@ function getMatchingElements (elementIterator, ast, multiple) {
   return results
 }
 
+function getMatchingElementsByTagName (elementIterator, tagName) {
+  const results = []
+  let element
+  const tagNameAsLowerCase = tagName.toLowerCase()
+  while ((element = elementIterator.next())) {
+    if (tagName === '*' || tagNameAsLowerCase === element.tagName.toLowerCase()) {
+      results.push(element)
+    }
+  }
+  return results
+}
+
+/**
+ * https://dom.spec.whatwg.org/#concept-getelementsbytagnamens
+ */
+function getMatchingElementsByTagNameNS (elementIterator, namespaceURI, tagName) {
+  const results = []
+  // exit early if null, empty string or undefined is provided
+  // these will not match the element namespace
+  if (!namespaceURI) {
+    return results
+  }
+  let element
+
+  while ((element = elementIterator.next())) {
+    // we'll do a case insensitive match to find out where the tag name is
+    const outerHTMLAsUppercase = element.outerHTML.toUpperCase()
+    // we are not not guaranteed to have an uppercase element.tagName, eg: svg elements
+    const index = outerHTMLAsUppercase.indexOf(element.tagName.toUpperCase())
+    // now we can get the original, non-uppercased tag name
+    const originalTagName = element.outerHTML.substr(index, element.tagName.length)
+    // tagName supports a wildcard parameter
+    const tagMatches = tagName === originalTagName || tagName === '*'
+    // namespace supports a wildcard parameter
+    const namespaceMatches = element.namespaceURI === namespaceURI || namespaceURI === '*'
+    if (tagMatches && namespaceMatches) {
+      results.push(element)
+    }
+  }
+  return results
+}
+
 function getMatchingElementsByClassName (elementIterator, classNames) {
   const results = []
   let element
@@ -236,6 +278,16 @@ function query (selector, context, multiple) {
   return getMatchingElements(elementIterator, ast, multiple)
 }
 
+function getElementsByTagName (tagName, context = document) {
+  const elementIterator = new ElementIterator(context)
+  return getMatchingElementsByTagName(elementIterator, tagName)
+}
+
+function getElementsByTagNameNS (namespaceURI, tagName, context = document) {
+  const elementIterator = new ElementIterator(context)
+  return getMatchingElementsByTagNameNS(elementIterator, namespaceURI, tagName)
+}
+
 function querySelector (selector, context = document) {
   return query(selector, context, false)
 }
@@ -253,5 +305,7 @@ function getElementsByClassName (classNames, context = document) {
 export {
   querySelectorAll,
   querySelector,
+  getElementsByTagName,
+  getElementsByTagNameNS,
   getElementsByClassName
 }
