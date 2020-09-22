@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
+/* global DOMParser */
 
 import assert from 'assert'
 
@@ -21,8 +22,31 @@ export function withDom (html, cb) {
   }
 }
 
-export function assertResultEqual (selector, actual, expected, qsa) {
-  if (qsa) {
+export function withDocument (html, cb) {
+  const parser = new DOMParser()
+  const dom = parser.parseFromString(html, 'text/html')
+  const scriptTag = dom.querySelector('script')
+
+  const container = document.createElement('div')
+  container.classList.add('container')
+  document.body.appendChild(container)
+
+  const script = document.createElement('script')
+  script.setAttribute('type', 'text/javascript')
+  script.innerHTML = scriptTag.innerHTML
+  document.body.appendChild(script)
+
+  try {
+    cb()
+  } finally {
+    // clean up
+    document.body.removeChild(script)
+    document.body.removeChild(container)
+  }
+}
+
+export function assertResultEqual (selector, actual, expected, isCollection) {
+  if (isCollection) {
     actual = simplifyElements(actual)
   } else {
     actual = simplifyElement(actual)
