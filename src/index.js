@@ -317,10 +317,6 @@ function getElementsByClassName (classNames, context = document) {
 }
 
 function getElementById (id, context = document) {
-  // if the context hasn't a defaultView, it can't be a Document or an HTMLDocument
-  /* if ((typeof context.defaultView === 'undefined' || !(context instanceof context.defaultView.Document)) && !(context instanceof ShadowRoot)) {
-    throw new TypeError('Provided context must be of type Document or ShadowRoot')
-  } */
   if (context.constructor.name !== 'Document' && context.constructor.name !== 'HTMLDocument' && context.constructor.name !== 'ShadowRoot') {
     throw new TypeError('Provided context must be of type Document or ShadowRoot')
   }
