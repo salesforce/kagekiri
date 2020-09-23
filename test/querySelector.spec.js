@@ -67,7 +67,7 @@ function testSelectors (lightDom, shadowDom, tests) {
         assertResultEqual(selector, context.querySelector(selector), expected, false)
       })
     })
-    it('shadow DOM - qS', () => {
+    it('shadow DOM - qSA', () => {
       withDom(shadowDom, context => {
         assertResultEqual(selector, querySelector(selector, context), expected, false)
       })
@@ -139,21 +139,6 @@ describe('basic test suite', function () {
         expected
       }
     ])
-  })
-
-  describe('global document', () => {
-    const selector = 'anything'
-    it('shadow DOM (global document) - qSA', () => {
-      withDom(simpleShadow1, () => {
-        assertResultEqual(selector, querySelectorAll(selector), [], true)
-      })
-    })
-
-    it('shadow DOM (global document) - qS', () => {
-      withDom(simpleShadow1, () => {
-        assert.strictEqual(querySelector(selector), null, `Expected querySelector(${selector}, document) to be null`)
-      })
-    })
   })
 
   describe('deepShadow1', () => {

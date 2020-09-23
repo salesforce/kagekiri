@@ -80,7 +80,6 @@ function getParent (element) {
   }
   // if an element is inside the shadow DOM, break outside of it
   const rootNode = element.getRootNode()
-  /* istanbul ignore else */
   if (rootNode !== document) {
     return rootNode.host
   }
@@ -111,7 +110,6 @@ function matches (element, ast) {
   const { nodes } = ast
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i]
-    /* istanbul ignore else */
     if (node.type === 'id') {
       if (element.id !== node.value) {
         return false
@@ -131,7 +129,6 @@ function matches (element, ast) {
         return false
       }
     } else if (node.type === 'combinator') {
-      /* istanbul ignore else */
       if (node.value === ' ') {
         // walk all ancestors
         const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
