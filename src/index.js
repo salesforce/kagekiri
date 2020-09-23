@@ -80,7 +80,6 @@ function getParent (element) {
   }
   // if an element is inside the shadow DOM, break outside of it
   const rootNode = element.getRootNode()
-  /* istanbul ignore else */
   if (rootNode !== document) {
     return rootNode.host
   }
@@ -111,7 +110,6 @@ function matches (element, ast) {
   const { nodes } = ast
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i]
-    /* istanbul ignore else */
     if (node.type === 'id') {
       if (element.id !== node.value) {
         return false
@@ -131,7 +129,6 @@ function matches (element, ast) {
         return false
       }
     } else if (node.type === 'combinator') {
-      /* istanbul ignore else */
       if (node.value === ' ') {
         // walk all ancestors
         const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
@@ -251,6 +248,17 @@ function getMatchingElementsByClassName (elementIterator, classNames) {
   return results
 }
 
+function getMatchingElementById (elementIterator, id) {
+  let element
+  while ((element = elementIterator.next())) {
+    if (element.id === id) {
+      return element
+    }
+  }
+
+  return null
+}
+
 // For convenience, attach the source to all pseudo selectors.
 // We need this later, and it's easier than passing the selector into every function.
 function attachSourceIfNecessary ({ nodes }, selector) {
@@ -305,10 +313,19 @@ function getElementsByClassName (classNames, context = document) {
   return getMatchingElementsByClassName(elementIterator, classNamesSplit, context)
 }
 
+function getElementById (id, context = document) {
+  if (context.constructor.name !== 'Document' && context.constructor.name !== 'HTMLDocument' && context.constructor.name !== 'ShadowRoot') {
+    throw new TypeError('Provided context must be of type Document or ShadowRoot')
+  }
+  const elementIterator = new ElementIterator(context)
+  return getMatchingElementById(elementIterator, id)
+}
+
 export {
   querySelectorAll,
   querySelector,
   getElementsByTagName,
   getElementsByTagNameNS,
-  getElementsByClassName
+  getElementsByClassName,
+  getElementById
 }

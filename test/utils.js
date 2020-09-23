@@ -21,8 +21,8 @@ export function withDom (html, cb) {
   }
 }
 
-export function assertResultEqual (selector, actual, expected, qsa) {
-  if (qsa) {
+export function assertResultEqual (selector, actual, expected, isCollection) {
+  if (isCollection) {
     actual = simplifyElements(actual)
   } else {
     actual = simplifyElement(actual)
