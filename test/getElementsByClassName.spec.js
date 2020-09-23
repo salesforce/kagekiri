@@ -41,6 +41,13 @@ describe('getElementsByClassName', () => {
     })
   })
 
+  it('shadow DOM - getElementsByClassName with the global document', () => {
+    const classNames = 'container main'
+    withDom(classNamesShadow1, () => {
+      assertResultEqual('.container.main', getElementsByClassName(classNames), [], true)
+    })
+  })
+
   it('light DOM - getElementsByClassName with multiple spaces', () => {
     withDom(classNamesLight1, context => {
       const classNames = 'container      main'
