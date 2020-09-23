@@ -8,8 +8,8 @@ Shadow DOM-piercing query APIs. Supports:
 | `querySelector`          | Element, Document |    ✅    |
 | `querySelectorAll`       | Element, Document |    ✅    |
 | `getElementsByClassName` | Element, Document |    ✅    |
-| `getElementsByTagName`   | Element, Document |    🔜    |
-| `getElementsByTagNameNS` | Element, Document |    🔜    |
+| `getElementsByTagName`   | Element, Document |    ✅    |
+| `getElementsByTagNameNS` | Element, Document |    ✅    |
 | `getElementById`         |      Document     |    🔜    |
 | `getElementsByName`      |      Document     |    🔜    |
 | `matches`                |      Element      |    🔜    |
