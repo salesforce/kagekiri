@@ -190,6 +190,14 @@ describe('getElementsByTagName', () => {
     }
   ]
   testTagNames('is case insensitive', 'SpAn', tagNameLight1, tagNameShadow1, expectedCaseInsensitive)
+
+  // special snowflake
+  it('shadow DOM - queries against the base document', () => {
+    const tagNames = "doesn't matter"
+    withDom(tagNameShadow1, () => {
+      assertResultEqual(tagNames, getElementsByTagName(tagNames), [], true)
+    })
+  })
 })
 
 describe('getElementsByTagNameNS', () => {
@@ -316,4 +324,12 @@ describe('getElementsByTagNameNS', () => {
   ]
 
   testTagNamesNS('handles wildcard tagName', 'http://www.w3.org/1999/xhtml', '*', tagNameLight1, tagNameShadow1, expectedWildcard, expectedWildcardShadow)
+
+  // special snowflake
+  it('shadow DOM - queries against the base document', () => {
+    const tagNames = "doesn't matter"
+    withDom(tagNameShadow1, () => {
+      assertResultEqual(tagNames, getElementsByTagNameNS('*', tagNames), [], true)
+    })
+  })
 })
