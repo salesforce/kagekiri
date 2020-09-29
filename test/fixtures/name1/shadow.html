@@ -1,0 +1,42 @@
+<!--
+  Copyright (c) 2020, salesforce.com, inc.
+  All rights reserved.
+  SPDX-License-Identifier: BSD-3-Clause
+  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<body>
+    <div class="container"></div>
+    <script>
+      class FancyComponent extends HTMLElement {
+        constructor() {
+          super()
+          const shadowRoot = this.attachShadow({mode: 'open'})
+          shadowRoot.innerHTML = `
+            <form name="contactForm">
+              <input name="name" />
+              <input name="email" />
+            </form>
+            <div class="inner-container">
+                <inner-component></inner-component>
+            </div>`
+        }
+      }
+
+      class InnerComponent extends HTMLElement {
+        constructor() {
+          super()
+          const shadowRoot = this.attachShadow({mode: 'open'})
+          shadowRoot.innerHTML = `<button name="test"></button>`
+        }
+        
+        connectedCallback() {
+          this.setAttribute('class', 'inner-component')
+        }
+      }
+
+      customElements.define('fancy-component', FancyComponent)
+      customElements.define('inner-component', InnerComponent)
+
+      document.querySelector('.container').appendChild(new FancyComponent())
+    </script>
+</body>

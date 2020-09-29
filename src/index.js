@@ -295,6 +295,12 @@ function attachSourceIfNecessary ({ nodes }, selector) {
   }
 }
 
+function assertContextIsDocumentOrShadowRoot (context) {
+  if (context.constructor.name !== 'Document' && context.constructor.name !== 'HTMLDocument' && context.constructor.name !== 'ShadowRoot') {
+    throw new TypeError('Provided context must be of type Document or ShadowRoot')
+  }
+}
+
 function query (selector, context, multiple) {
   const ast = postcssSelectorParser().astSync(selector)
   attachSourceIfNecessary(ast, selector)
@@ -328,15 +334,14 @@ function getElementsByClassName (classNames, context = document) {
 }
 
 function getElementById (id, context = document) {
-  if (context.constructor.name !== 'Document' && context.constructor.name !== 'HTMLDocument' && context.constructor.name !== 'ShadowRoot') {
-    throw new TypeError('Provided context must be of type Document or ShadowRoot')
-  }
+  assertContextIsDocumentOrShadowRoot(context)
   const elementIterator = new ElementIterator(context)
   return getMatchingElementById(elementIterator, id)
 }
 
-function getElementsByName (name) {
-  const elementIterator = new ElementIterator(document)
+function getElementsByName (name, context = document) {
+  assertContextIsDocumentOrShadowRoot(context)
+  const elementIterator = new ElementIterator(context)
   return getMatchingElementsByName(elementIterator, name)
 }
 
