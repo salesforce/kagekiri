@@ -11,7 +11,7 @@ Shadow DOM-piercing query APIs. Supports:
 | `getElementsByTagName`   | Element, Document |    ✅    |
 | `getElementsByTagNameNS` | Element, Document |    ✅    |
 | `getElementById`         |      Document     |    ✅    |
-| `getElementsByName`      |      Document     |    🔜    |
+| `getElementsByName`      |      Document     |    ✅    |
 | `matches`                |      Element      |    🔜    |
 
 
