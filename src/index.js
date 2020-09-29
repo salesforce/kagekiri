@@ -353,7 +353,8 @@ function getElementsByName (name, context = document) {
 
 function matches (selector, element) {
   assertIsElement(element)
-  return query(selector, element, false)
+  const result = query(selector, element, false)
+  return result !== null && result === element
 }
 
 export {
