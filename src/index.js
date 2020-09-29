@@ -301,10 +301,8 @@ function assertIsDocumentOrShadowRoot (context) {
   }
 }
 
-function assertElement (element) {
-  if (element.nodeType && element.nodeType === 1) {
-    return true
-  } else {
+function assertIsElement (element) {
+  if (!element.nodeType !== 1) {
     throw new TypeError('Provided context must be of type Element')
   }
 }
@@ -354,7 +352,7 @@ function getElementsByName (name, context = document) {
 }
 
 function matches (selector, element) {
-  assertElement(element)
+  assertIsElement(element)
   return query(selector, element, false)
 }
 
