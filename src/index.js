@@ -295,8 +295,8 @@ function attachSourceIfNecessary ({ nodes }, selector) {
   }
 }
 
-function assertContextIsDocumentOrShadowRoot (context) {
-  if (context.constructor.name !== 'Document' && context.constructor.name !== 'HTMLDocument' && context.constructor.name !== 'ShadowRoot') {
+function assertIsDocumentOrShadowRoot (context) {
+  if (context.nodeType !== 11 && context.nodeType !== 9) {
     throw new TypeError('Provided context must be of type Document or ShadowRoot')
   }
 }
@@ -334,13 +334,13 @@ function getElementsByClassName (classNames, context = document) {
 }
 
 function getElementById (id, context = document) {
-  assertContextIsDocumentOrShadowRoot(context)
+  assertIsDocumentOrShadowRoot(context)
   const elementIterator = new ElementIterator(context)
   return getMatchingElementById(elementIterator, id)
 }
 
 function getElementsByName (name, context = document) {
-  assertContextIsDocumentOrShadowRoot(context)
+  assertIsDocumentOrShadowRoot(context)
   const elementIterator = new ElementIterator(context)
   return getMatchingElementsByName(elementIterator, name)
 }
