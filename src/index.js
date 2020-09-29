@@ -89,7 +89,7 @@ function getParent (element) {
 function getFirstMatchingAncestor (element, nodes) {
   let ancestor = getParent(element)
   while (ancestor) {
-    if (matches(ancestor, { nodes })) {
+    if (matchesSelector(ancestor, { nodes })) {
       return ancestor
     }
 
@@ -100,14 +100,14 @@ function getFirstMatchingAncestor (element, nodes) {
 function getFirstMatchingPreviousSibling (element, nodes) {
   let sibling = element.previousElementSibling
   while (sibling) {
-    if (matches(sibling, { nodes })) {
+    if (matchesSelector(sibling, { nodes })) {
       return sibling
     }
     sibling = sibling.previousElementSibling
   }
 }
 
-function matches (element, ast) {
+function matchesSelector (element, ast) {
   const { nodes } = ast
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i]
@@ -146,7 +146,7 @@ function matches (element, ast) {
         // walk immediate parent only
         const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
         const ancestor = getParent(element)
-        if (!ancestor || !matches(ancestor, { nodes: precedingNodes })) {
+        if (!ancestor || !matchesSelector(ancestor, { nodes: precedingNodes })) {
           return false
         } else {
           element = ancestor
@@ -156,7 +156,7 @@ function matches (element, ast) {
         // walk immediate sibling only
         const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
         const sibling = element.previousElementSibling
-        if (!sibling || !matches(sibling, { nodes: precedingNodes })) {
+        if (!sibling || !matchesSelector(sibling, { nodes: precedingNodes })) {
           return false
         } else {
           i -= precedingNodes.length
@@ -181,7 +181,7 @@ function getMatchingElements (elementIterator, ast, multiple) {
   let element
   while ((element = elementIterator.next())) {
     for (const node of ast.nodes) { // multiple nodes here are comma-separated
-      if (matches(element, node)) {
+      if (matchesSelector(element, node)) {
         if (multiple) {
           results.push(element)
         } else {
@@ -301,6 +301,14 @@ function assertIsDocumentOrShadowRoot (context) {
   }
 }
 
+function assertElement (element) {
+  if (element.nodeType && element.nodeType === 1) {
+    return true
+  } else {
+    throw new TypeError('Provided context must be of type Element')
+  }
+}
+
 function query (selector, context, multiple) {
   const ast = postcssSelectorParser().astSync(selector)
   attachSourceIfNecessary(ast, selector)
@@ -345,6 +353,11 @@ function getElementsByName (name, context = document) {
   return getMatchingElementsByName(elementIterator, name)
 }
 
+function matches (selector, element) {
+  assertElement(element)
+  return query(selector, element, false)
+}
+
 export {
   querySelectorAll,
   querySelector,
@@ -352,5 +365,6 @@ export {
   getElementsByTagNameNS,
   getElementsByClassName,
   getElementById,
-  getElementsByName
+  getElementsByName,
+  matches
 }
