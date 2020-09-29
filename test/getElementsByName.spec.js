@@ -91,6 +91,10 @@ describe('getElementsByName', () => {
         }
       ]
       assertResultEqual(name, getElementsByName(name, context), expected, true)
+
+      name = 'tEsT'
+      expected = []
+      assertResultEqual(name, getElementsByName(name, context), expected, true)
     })
   })
 })
