@@ -351,12 +351,12 @@ function getElementsByName (name, context = document) {
   return getMatchingElementsByName(elementIterator, name)
 }
 
-function matches (selector, element) {
-  assertIsElement(element)
+function matches (selector, context) {
+  assertIsElement(context)
   const ast = postcssSelectorParser().astSync(selector)
   attachSourceIfNecessary(ast, selector)
 
-  return matchesSelector(element, ast)
+  return matchesSelector(context, ast)
 }
 
 export {
