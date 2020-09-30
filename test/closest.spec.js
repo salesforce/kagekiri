@@ -58,14 +58,14 @@ describe(('closest is own element'), () => {
   }]
   const selector = '.text'
 
-  it('light DOM - does not find closest ancestor', () => {
+  it('light DOM - finds closest ancestor', () => {
     withDom(lightSimple1, context => {
       const element = context.querySelector(selector)
       assertResultEqual(selector, element.closest(selector), expected, false)
     })
   })
 
-  it('shadow DOM - does not find closest ancestor', () => {
+  it('shadow DOM - finds closest ancestor', () => {
     withDom(shadowSimple1, context => {
       const element = querySelector(selector, context)
       assertResultEqual(selector, closest(selector, element), expected, false)
