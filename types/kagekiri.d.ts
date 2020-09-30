@@ -12,3 +12,4 @@ export function getElementsByTagName(tagName: string, context?: Node): Element[]
 export function getElementsByTagNameNS(namespaceURI: string, localName: string, context?: Node): Element[];
 export function getElementById(id: string, context?: DocumentOrShadowRoot): Element | null;
 export function getElementsByName(name: string, context?: DocumentOrShadowRoot): Element[];
+export function closest(selector: string, context?: Node): Element | null;

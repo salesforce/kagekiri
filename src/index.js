@@ -345,6 +345,18 @@ function getElementsByName (name, context = document) {
   return getMatchingElementsByName(elementIterator, name)
 }
 
+function closest (selector, element) {
+  // if
+  const ast = postcssSelectorParser().astSync(selector)
+  attachSourceIfNecessary(ast, selector)
+
+  if (matches(element, ast)) {
+    return element
+  } else {
+    return getFirstMatchingAncestor(selector, element)
+  }
+}
+
 export {
   querySelectorAll,
   querySelector,
@@ -352,5 +364,6 @@ export {
   getElementsByTagNameNS,
   getElementsByClassName,
   getElementById,
-  getElementsByName
+  getElementsByName,
+  closest
 }
