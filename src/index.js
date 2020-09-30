@@ -302,7 +302,7 @@ function assertIsDocumentOrShadowRoot (context) {
 }
 
 function assertIsElement (element) {
-  if (!element.nodeType !== 1) {
+  if (!element || element.nodeType !== 1) {
     throw new TypeError('Provided context must be of type Element')
   }
 }
@@ -353,8 +353,10 @@ function getElementsByName (name, context = document) {
 
 function matches (selector, element) {
   assertIsElement(element)
-  const result = query(selector, element, false)
-  return result !== null && result === element
+  const ast = postcssSelectorParser().astSync(selector)
+  attachSourceIfNecessary(ast, selector)
+
+  return matchesSelector(element, ast)
 }
 
 export {
