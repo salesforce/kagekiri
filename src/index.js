@@ -88,7 +88,7 @@ function getParent (element) {
 
 function getFirstMatchingAncestor (element, nodes) {
   let ancestor = getParent(element)
-  while (ancestor) {
+  while (ancestor && ancestor.nodeType === 1) {
     if (matches(ancestor, { nodes })) {
       return ancestor
     }
@@ -320,7 +320,7 @@ function getElementsByTagNameNS (namespaceURI, tagName, context = document) {
 }
 
 function querySelector (selector, context = document) {
-  return query(selector, context, false)
+  return query(selector, context, false) || null
 }
 
 function querySelectorAll (selector, context = document) {
@@ -349,14 +349,14 @@ function closest (selector, context) {
   const ast = postcssSelectorParser().astSync(selector)
   attachSourceIfNecessary(ast, selector)
 
-  let el = context
-  for (const node of ast.nodes) {
-    while (el && el.nodeType === 1) {
-      if (matches(el, node)) {
-        return el
-      } else {
-        el = getParent(el)
-      }
+  for (const node of ast.nodes) { // multiple nodes here are comma-separated
+    if (matches(context, node)) {
+      return context
+    }
+
+    const matchingAncestor = getFirstMatchingAncestor(context, node.nodes)
+    if (matchingAncestor) {
+      return matchingAncestor
     }
   }
   return null

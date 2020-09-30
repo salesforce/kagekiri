@@ -852,7 +852,7 @@ describe('basic test suite', function () {
       assertElement(qs(qs(document, '.component'), '.text'), text)
       assertElement(qs(qs(document, '.container'), '.text'), text)
       assertElement(qs(qs(qs(document, 'body'), '.component'), '.text'), text)
-      assertElement(qs(qs(qs(document, 'body'), '.component'), '.fake'), undefined)
+      assertElement(qs(qs(qs(document, 'body'), '.component'), '.fake'), null)
 
       assertElements(qsa(document, '.text'), [text])
       assertElements(qsa(qs(document, '.component'), '.text'), [text])
