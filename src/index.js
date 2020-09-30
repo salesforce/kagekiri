@@ -109,14 +109,18 @@ function getFirstMatchingPreviousSibling (element, nodes) {
 
 function matches (element, ast) {
   const { nodes } = ast
+  console.log(nodes.length)
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i]
+    console.log(`node type: ${node.type}`)
     /* istanbul ignore else */
     if (node.type === 'id') {
       if (element.id !== node.value) {
         return false
       }
     } else if (node.type === 'class') {
+      console.log(`checking ${node} against class`)
+      console.log(element.classList.contains(node.value))
       if (!element.classList.contains(node.value)) {
         return false
       }
@@ -348,10 +352,14 @@ function getElementsByName (name, context = document) {
 function closest (selector, context) {
   const ast = postcssSelectorParser().astSync(selector)
   attachSourceIfNecessary(ast, selector)
-
+  console.log('about to call matches')
+  console.log(context)
   if (matches(context, ast)) {
+    console.log(selector)
+    console.log('matched passed in element')
     return context
   } else {
+    console.log('trying to match ancestor')
     return getFirstMatchingAncestor(selector, context)
   }
 }
