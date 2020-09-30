@@ -25,7 +25,7 @@ describe(('element matches'), () => {
     withDom(simpleShadow1, context => {
       const element = querySelector(matchingSelector, context)
       assert(typeof element !== 'undefined')
-      assert(matches(matchingSelector, element) === true)
+      assert.strictEqual(matches(matchingSelector, element), true)
     })
   })
 
@@ -42,7 +42,7 @@ describe(('element matches'), () => {
     withDom(simpleShadow1, context => {
       const element = querySelector(matchingSelector, context)
       assert(typeof element !== 'undefined')
-      assert(matches(nonMatchingSelector, element) === false)
+      assert.strictEqual(matches(nonMatchingSelector, element), false)
     })
   })
 })
