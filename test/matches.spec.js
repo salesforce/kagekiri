@@ -17,7 +17,7 @@ describe(('element matches'), () => {
   it('light DOM - matches', () => {
     withDom(simpleLight1, context => {
       const element = context.querySelector(matchingSelector)
-      assert(element.matches(matchingSelector) === true)
+      assert.strictEqual(element.matches(matchingSelector), true)
     })
   })
 
@@ -34,7 +34,7 @@ describe(('element matches'), () => {
   it('light DOM - does not match', () => {
     withDom(simpleLight1, context => {
       const element = context.querySelector(matchingSelector)
-      assert(element.matches(nonMatchingSelector) === false)
+      assert.strictEqual(element.matches(nonMatchingSelector), false)
     })
   })
 
