@@ -13,6 +13,7 @@ Shadow DOM-piercing query APIs. Supports:
 | `getElementById`         |      Document     |    ✅    |
 | `getElementsByName`      |      Document     |    ✅    |
 | `matches`                |      Element      |    ✅    |
+| `closest`                |      Element      |    ✅    |
 
 
 Usage

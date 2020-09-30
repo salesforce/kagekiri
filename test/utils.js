@@ -26,7 +26,7 @@ export function assertResultEqual (selector, actual, expected, isCollection) {
     actual = simplifyElements(actual)
   } else {
     actual = simplifyElement(actual)
-    expected = expected[0]
+    expected = expected[0] || null
   }
   assert.deepStrictEqual(actual, expected,
       `Selector failed: ${stringify(selector)}, ${stringify(actual)} !== ${stringify(expected)}`)
@@ -34,7 +34,7 @@ export function assertResultEqual (selector, actual, expected, isCollection) {
 
 export function simplifyElement (element) {
   if (!element) {
-    return undefined
+    return null
   }
   return {
     tagName: element.tagName,

@@ -364,6 +364,23 @@ function matches (selector, context) {
   return false
 }
 
+function closest (selector, context) {
+  const ast = postcssSelectorParser().astSync(selector)
+  attachSourceIfNecessary(ast, selector)
+
+  for (const node of ast.nodes) { // multiple nodes here are comma-separated
+    if (matchesSelector(context, node)) {
+      return context
+    }
+
+    const matchingAncestor = getFirstMatchingAncestor(context, node.nodes)
+    if (matchingAncestor) {
+      return matchingAncestor
+    }
+  }
+  return null
+}
+
 export {
   querySelectorAll,
   querySelector,
@@ -372,5 +389,6 @@ export {
   getElementsByClassName,
   getElementById,
   getElementsByName,
-  matches
+  matches,
+  closest
 }
