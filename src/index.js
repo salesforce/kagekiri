@@ -320,7 +320,7 @@ function getElementsByTagNameNS (namespaceURI, tagName, context = document) {
 }
 
 function querySelector (selector, context = document) {
-  return query(selector, context, false) || null
+  return query(selector, context, false)
 }
 
 function querySelectorAll (selector, context = document) {
