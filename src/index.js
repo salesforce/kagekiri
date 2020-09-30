@@ -88,7 +88,7 @@ function getParent (element) {
 
 function getFirstMatchingAncestor (element, nodes) {
   let ancestor = getParent(element)
-  while (ancestor && ancestor.nodeType === 1) {
+  while (ancestor) {
     if (matches(ancestor, { nodes })) {
       return ancestor
     }
