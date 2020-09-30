@@ -356,7 +356,12 @@ function matches (selector, context) {
   const ast = postcssSelectorParser().astSync(selector)
   attachSourceIfNecessary(ast, selector)
 
-  return matchesSelector(context, ast)
+  for (const node of ast.nodes) { // multiple nodes here are comma-separated
+    if (matchesSelector(context, node)) {
+      return true
+    }
+  }
+  return false
 }
 
 export {

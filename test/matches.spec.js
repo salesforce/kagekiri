@@ -12,20 +12,37 @@ import simpleShadow1 from './fixtures/simple1/shadow.html'
 import assert from 'assert'
 
 describe(('element matches'), () => {
-  const selector = '.container .component span'
+  const matchingSelector = '.container .component span'
 
   it('light DOM - matches', () => {
     withDom(simpleLight1, context => {
-      const element = context.querySelector(selector)
-      assert.strictEqual(element.matches(selector), true)
+      const element = context.querySelector(matchingSelector)
+      assert(element.matches(matchingSelector) === true)
     })
   })
 
   it('shadow DOM - matches', () => {
     withDom(simpleShadow1, context => {
-      const element = querySelector(selector, context)
+      const element = querySelector(matchingSelector, context)
       assert(typeof element !== 'undefined')
-      assert.strictEqual(matches(selector, element), true)
+      assert(matches(matchingSelector, element) === true)
+    })
+  })
+
+  const nonMatchingSelector = '.container .stuff span'
+
+  it('light DOM - does not match', () => {
+    withDom(simpleLight1, context => {
+      const element = context.querySelector(matchingSelector)
+      assert(element.matches(nonMatchingSelector) === false)
+    })
+  })
+
+  it('shadow DOM - does not match', () => {
+    withDom(simpleShadow1, context => {
+      const element = querySelector(matchingSelector, context)
+      assert(typeof element !== 'undefined')
+      assert(matches(nonMatchingSelector, element) === false)
     })
   })
 })
