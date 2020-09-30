@@ -180,7 +180,7 @@ function getMatchingElements (elementIterator, ast, multiple) {
   const results = multiple ? [] : null
   let element
   while ((element = elementIterator.next())) {
-    for (const node of ast.nodes) { // multiple nodes here are comma-separated
+    for (const node of ast.nodes) { // comma-separated selectors, e.g. .foo, .bar
       if (matchesSelector(element, node)) {
         if (multiple) {
           results.push(element)
@@ -307,9 +307,14 @@ function assertIsElement (element) {
   }
 }
 
-function query (selector, context, multiple) {
+function parse (selector) {
   const ast = postcssSelectorParser().astSync(selector)
   attachSourceIfNecessary(ast, selector)
+  return ast
+}
+
+function query (selector, context, multiple) {
+  const ast = parse(selector)
 
   const elementIterator = new ElementIterator(context)
   return getMatchingElements(elementIterator, ast, multiple)
@@ -353,10 +358,9 @@ function getElementsByName (name, context = document) {
 
 function matches (selector, context) {
   assertIsElement(context)
-  const ast = postcssSelectorParser().astSync(selector)
-  attachSourceIfNecessary(ast, selector)
+  const ast = parse(selector)
 
-  for (const node of ast.nodes) { // multiple nodes here are comma-separated
+  for (const node of ast.nodes) { // comma-separated selectors, e.g. .foo, .bar
     if (matchesSelector(context, node)) {
       return true
     }
@@ -365,10 +369,9 @@ function matches (selector, context) {
 }
 
 function closest (selector, context) {
-  const ast = postcssSelectorParser().astSync(selector)
-  attachSourceIfNecessary(ast, selector)
+  const ast = parse(selector)
 
-  for (const node of ast.nodes) { // multiple nodes here are comma-separated
+  for (const node of ast.nodes) { // comma-separated selectors, e.g. .foo, .bar
     if (matchesSelector(context, node)) {
       return context
     }
