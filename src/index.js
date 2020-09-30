@@ -345,15 +345,14 @@ function getElementsByName (name, context = document) {
   return getMatchingElementsByName(elementIterator, name)
 }
 
-function closest (selector, element) {
-  // if
+function closest (selector, context) {
   const ast = postcssSelectorParser().astSync(selector)
   attachSourceIfNecessary(ast, selector)
 
-  if (matches(element, ast)) {
-    return element
+  if (matches(context, ast)) {
+    return context
   } else {
-    return getFirstMatchingAncestor(selector, element)
+    return getFirstMatchingAncestor(selector, context)
   }
 }
 
