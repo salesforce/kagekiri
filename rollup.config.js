@@ -15,42 +15,56 @@ import inject from '@rollup/plugin-inject'
 // Note that postcss-selector-parser is bundled into all outputs because its deps (util.promisify)
 // cause problems depending on the consumer's bundler. We can make things simpler for consumers of
 // kagekiri by just bundling our dependencies. (Polyfills are also bundled.)
-
-function config (file, format, opts = {}) {
-  const plugins = opts.plugins || []
-  return {
-    input: './src/index.js',
-    output: {
-      file,
-      format,
-      name: 'kagekiri'
-    },
-    plugins: [
-      nodeResolve({
-        mainFields: ['browser', 'module', 'main'],
-        preferBuiltins: false
-      }),
-      cjs(),
-      globals(),
-      buble({
-        transforms: {
-          dangerousForOf: true
-        }
-      }),
-      inject({
-        'Object.assign': path.resolve('node_modules/object-assign'),
-        exclude: 'node_modules/object-assign/**'
-      }),
-      ...plugins
-    ]
-  }
+const name = 'kagekiri'
+export default {
+  input: './src/index.js',
+  output: [{
+    file: 'dist/kagekiri.umd.js',
+    format: 'umd',
+    name
+  },
+  {
+    file: 'dist/kagekiri.umd.min.js',
+    format: 'umd',
+    name,
+    plugins: [terser()]
+  },
+  {
+    file: 'dist/kagekiri.cjs.js',
+    format: 'cjs',
+    name
+  },
+  {
+    file: 'dist/kagekiri.es.js',
+    format: 'es',
+    name
+  },
+  {
+    file: 'dist/kagekiri.iife.js',
+    format: 'iife',
+    name
+  },
+  {
+    file: 'dist/kagekiri.iife.min.js',
+    format: 'iife',
+    name,
+    plugins: [terser()]
+  }],
+  plugins: [
+    nodeResolve({
+      mainFields: ['browser', 'module', 'main'],
+      preferBuiltins: false
+    }),
+    cjs(),
+    globals(),
+    buble({
+      transforms: {
+        dangerousForOf: true
+      }
+    }),
+    inject({
+      'Object.assign': path.resolve('node_modules/object-assign'),
+      exclude: 'node_modules/object-assign/**'
+    })
+  ]
 }
-
-export default [
-  config('dist/kagekiri.umd.js', 'umd'),
-  config('dist/kagekiri.umd.min.js', 'umd', { plugins: [terser()] }),
-  config('dist/kagekiri.cjs.js', 'cjs'),
-  config('dist/kagekiri.es.js', 'es'),
-  config('dist/kagekiri.iife.js', 'iife'),
-  config('dist/kagekiri.iife.min.js', 'iife', { plugins: [terser()] })
-]
