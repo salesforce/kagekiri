@@ -100,15 +100,15 @@ export function getElementsByName(name: string, context?: DocumentOrShadowRoot):
  * [`Element.closest`](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest)
  *
  * @param selector - CSS selector
- * @param context - element to match against
+ * @param element - element to match against
  */
-export function matches(selector: string, context: Node): boolean;
+export function matches(selector: string, element: Node): boolean;
 
 /**
  * Find the closest ancestor of an element (or the element itself) matching the given CSS selector. Analogous to
  * [`Element.closest`](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest)
  *
  * @param selector - CSS selector
- * @param context - target element to match against, and whose ancestors to match against
+ * @param element - target element to match against, and whose ancestors to match against
  */
-export function closest(selector: string, context: Node): Element | null;
+export function closest(selector: string, element: Node): Element | null;

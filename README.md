@@ -95,7 +95,7 @@ kagekiri.querySelector('my-component > .hello') // <span> 😃
 
 ### closest
 
-▸ **closest**(`selector`: string, `context`: Node): Element \| null
+▸ **closest**(`selector`: string, `element`: Node): Element \| null
 
 
 
@@ -107,7 +107,7 @@ Find the closest ancestor of an element (or the element itself) matching the giv
 Name | Type | Description |
 ------ | ------ | ------ |
 `selector` | string | CSS selector |
-`context` | Node | target element to match against, and whose ancestors to match against  |
+`element` | Node | target element to match against, and whose ancestors to match against  |
 
 **Returns:** Element \| null
 
@@ -237,7 +237,7 @@ ___
 
 ### matches
 
-▸ **matches**(`selector`: string, `context`: Node): boolean
+▸ **matches**(`selector`: string, `element`: Node): boolean
 
 
 
@@ -249,7 +249,7 @@ Return true if the given Node matches the given CSS selector, or false otherwise
 Name | Type | Description |
 ------ | ------ | ------ |
 `selector` | string | CSS selector |
-`context` | Node | element to match against  |
+`element` | Node | element to match against  |
 
 **Returns:** boolean
 

@@ -356,27 +356,27 @@ function getElementsByName (name, context = document) {
   return getMatchingElementsByName(elementIterator, name)
 }
 
-function matches (selector, context) {
-  assertIsElement(context)
+function matches (selector, element) {
+  assertIsElement(element)
   const ast = parse(selector)
 
   for (const node of ast.nodes) { // comma-separated selectors, e.g. .foo, .bar
-    if (matchesSelector(context, node)) {
+    if (matchesSelector(element, node)) {
       return true
     }
   }
   return false
 }
 
-function closest (selector, context) {
+function closest (selector, element) {
   const ast = parse(selector)
 
   for (const node of ast.nodes) { // comma-separated selectors, e.g. .foo, .bar
-    if (matchesSelector(context, node)) {
-      return context
+    if (matchesSelector(element, node)) {
+      return element
     }
 
-    const matchingAncestor = getFirstMatchingAncestor(context, node.nodes)
+    const matchingAncestor = getFirstMatchingAncestor(element, node.nodes)
     if (matchingAncestor) {
       return matchingAncestor
     }
