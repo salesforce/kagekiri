@@ -13,7 +13,7 @@ import { terser } from 'rollup-plugin-terser'
 import inject from '@rollup/plugin-inject'
 
 // Note that postcss-selector-parser is bundled into all outputs because its deps (util.promisify)
-// cause problems depending on the consumer's bundler. We can make things simpler for consumers of
+// causes problems depending on the consumer's bundler. We can make things simpler for consumers of
 // kagekiri by just bundling our dependencies. (Polyfills are also bundled.)
 const name = 'kagekiri'
 export default {
