@@ -50,28 +50,32 @@ import nestedSlotsShadow7 from './fixtures/nestedSlots7/shadow.html'
 import unusualSelectorsLight1 from './fixtures/unusualSelectors1/light.html'
 import unusualSelectorsShadow1 from './fixtures/unusualSelectors1/shadow.html'
 
-function testSelectors (lightDom, shadowDom, tests) {
+function testSelectors (lightDom, shadowDom, tests, { shadowOnly = false, lightOnly = false } = {}) {
   tests.forEach(({ selector, expected }) => {
-    it('light DOM - qSA', () => {
-      withDom(lightDom, context => {
-        assertResultEqual(selector, context.querySelectorAll(selector), expected, true)
+    if (!shadowOnly) {
+      it('light DOM - qSA', () => {
+        withDom(lightDom, context => {
+          assertResultEqual(selector, context.querySelectorAll(selector), expected, true)
+        })
       })
-    })
-    it('shadow DOM - qSA', () => {
-      withDom(shadowDom, context => {
-        assertResultEqual(selector, querySelectorAll(selector, context), expected, true)
+      it('light DOM - qS', () => {
+        withDom(lightDom, context => {
+          assertResultEqual(selector, context.querySelector(selector), expected, false)
+        })
       })
-    })
-    it('light DOM - qS', () => {
-      withDom(lightDom, context => {
-        assertResultEqual(selector, context.querySelector(selector), expected, false)
+    }
+    if (!lightOnly) {
+      it('shadow DOM - qS', () => {
+        withDom(shadowDom, context => {
+          assertResultEqual(selector, querySelector(selector, context), expected, false)
+        })
       })
-    })
-    it('shadow DOM - qS', () => {
-      withDom(shadowDom, context => {
-        assertResultEqual(selector, querySelector(selector, context), expected, false)
+      it('shadow DOM - qSA', () => {
+        withDom(shadowDom, context => {
+          assertResultEqual(selector, querySelectorAll(selector, context), expected, true)
+        })
       })
-    })
+    }
   })
 }
 
@@ -899,5 +903,96 @@ describe('basic test suite', function () {
       { selector: '[data-hashdot="hash\\#\\.dot"]', expected: hashDot },
       { selector: "[data-hashdot='hash\\#\\.dot']", expected: hashDot }
     ])
+  })
+
+  describe('top-level html node', () => {
+    const expectedJustHtml = [
+      {
+        tagName: 'HTML',
+        classList: []
+      }
+    ]
+    const expectedAllLight = [
+      {
+        tagName: 'HTML',
+        classList: []
+      },
+      {
+        tagName: 'HEAD',
+        classList: []
+      },
+      {
+        tagName: 'BODY',
+        classList: []
+      },
+      {
+        tagName: 'DIV',
+        classList: ['container']
+      },
+      {
+        tagName: 'DIV',
+        classList: ['component']
+      },
+      {
+        tagName: 'SPAN',
+        classList: ['text']
+      },
+      {
+        tagName: 'SPAN',
+        classList: ['red-herring']
+      }
+    ]
+    const expectedAllShadow = [
+      {
+        tagName: 'HTML',
+        classList: []
+      },
+      {
+        tagName: 'HEAD',
+        classList: []
+      },
+      {
+        tagName: 'BODY',
+        classList: []
+      },
+      {
+        tagName: 'DIV',
+        classList: ['container']
+      },
+      {
+        tagName: 'FANCY-COMPONENT',
+        classList: ['component']
+      },
+      {
+        tagName: 'SPAN',
+        classList: ['text']
+      },
+      {
+        tagName: 'SPAN',
+        classList: ['red-herring']
+      },
+      {
+        tagName: 'SCRIPT',
+        classList: []
+      }
+    ]
+    testSelectors(simpleLight1, simpleShadow1, [
+      {
+        selector: 'html',
+        expected: expectedJustHtml
+      }
+    ])
+    testSelectors(simpleLight1, simpleShadow1, [
+      {
+        selector: '*',
+        expected: expectedAllLight
+      }
+    ], { lightOnly: true })
+    testSelectors(simpleLight1, simpleShadow1, [
+      {
+        selector: '*',
+        expected: expectedAllShadow
+      }
+    ], { shadowOnly: true })
   })
 })

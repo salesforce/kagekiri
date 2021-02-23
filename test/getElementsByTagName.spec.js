@@ -125,6 +125,10 @@ describe('getElementsByTagName', () => {
 
   const expectedWildcardShadow = [
     {
+      tagName: 'HTML',
+      classList: []
+    },
+    {
       tagName: 'HEAD',
       classList: []
     },
@@ -289,6 +293,10 @@ describe('getElementsByTagNameNS', () => {
   ]
 
   const expectedWildcardShadow = [
+    {
+      tagName: 'HTML',
+      classList: []
+    },
     {
       tagName: 'HEAD',
       classList: []
