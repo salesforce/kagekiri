@@ -36,7 +36,7 @@
     "@rollup/plugin-inject": "^4.0.2",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "assert": "^2.0.0",
-    "bundlesize": "^0.18.0",
+    "bundlesize": "^0.18.1",
     "husky": "^4.3.0",
     "karma": "^5.2.2",
     "karma-chrome-launcher": "^3.1.0",
