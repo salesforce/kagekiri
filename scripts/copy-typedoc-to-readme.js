@@ -8,10 +8,10 @@ const END_MARKER = '<!-- end API -->'
 
 // Take the typedoc output and insert it directly into the README
 async function main () {
-  let api = await readFile('./typedoc/modules/_kagekiri_d_.md', 'utf8')
+  let api = await readFile('./typedoc/modules.md', 'utf8')
   api = api.substring(api.indexOf('\n## Functions'))
   api = api.replace('## Functions', '## API')
-  api = api.replace(/\*Defined in .*?\*/g, '')
+  api = api.replace(/\nDefined in: .*?\n/g, '')
 
   let readme = await readFile('./README.md', 'utf8')
   const startIdx = readme.indexOf(START_MARKER)
