@@ -16,8 +16,8 @@ import postcssSelectorParser from 'postcss-selector-parser'
 const nativeMatches = Element.prototype.matches || /* istanbul ignore next */ Element.prototype.msMatchesSelector
 
 function getChildren (node) {
-  if (node.documentElement) { // document
-    return node.documentElement.children
+  if (node.documentElement) { // document, make sure <html> is the first "child"
+    return [node.documentElement]
   } else if (node.shadowRoot) { // shadow host
     return node.shadowRoot.children
   } else if (typeof node.assignedElements === 'function') { // slot
