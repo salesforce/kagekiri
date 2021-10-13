@@ -81,11 +81,6 @@
       "compression": "none"
     }
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "**/*.js": "standard --fix"
   },
