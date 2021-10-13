@@ -8,19 +8,13 @@ jobs:
           CHROME_BIN: '/usr/bin/google-chrome'
     steps:
       - checkout
-      - run:
-          name: Install Python
-          working_directory: ~/kagekiri
-          command: |
-            sudo apt-get -y -qq update
-            sudo apt-get install python-dev -y
       - restore_cache: # special step to restore the dependency cache https://circleci.com/docs/2.0/caching/
-          key: dependency-cache-v2-{{ checksum "package-lock.json" }}
+          key: dependency-cache-v3-{{ checksum "package-lock.json" }}
       - run:
           name: install-npm
           command: npm install
       - save_cache: # special step to save the dependency cache
-          key: dependency-cache-v2-{{ checksum "package-lock.json" }}
+          key: dependency-cache-v3-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
       - run: # lint
