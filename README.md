@@ -88,9 +88,6 @@ kagekiri.querySelector('my-component .hello')   // <span> 😃
 kagekiri.querySelector('my-component > .hello') // <span> 😃
 ```
 
-<!-- begin API -->
-
-
 ## API
 
 ### closest
@@ -278,9 +275,6 @@ Name | Type | Description |
 `context?` | Node | context to query in, or `document` by default    |
 
 **Returns:** Element[]
-
-
-<!-- end API -->
 
 How it works
 ---

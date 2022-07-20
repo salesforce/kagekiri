@@ -10,7 +10,6 @@
     "test:debug": "karma start --browsers=Chrome --single-run=false",
     "test:bundlesize": "bundlesize",
     "build": "rollup -c",
-    "typedoc": "rimraf typedoc && typedoc --plugin typedoc-plugin-markdown --out typedoc ./types && node ./scripts/copy-typedoc-to-readme.js && rimraf typedoc",
     "prepare": "npm run build",
     "lint": "standard *.js {scripts,src,test}/**/*.js",
     "lint:fix": "standard --fix *.js  {scripts,src,test}/**/*.js"
@@ -45,7 +44,7 @@
     "karma-mocha": "^2.0.1",
     "karma-rollup-preprocessor": "^7.0.5",
     "lint-staged": "^11.2.3",
-    "mocha": "^9.1.2",
+    "mocha": "^10.0.0",
     "object-assign": "^4.1.1",
     "postcss-selector-parser": "^6.0.3",
     "rimraf": "^3.0.2",
@@ -56,10 +55,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "standard": "^16.0.4",
     "string.prototype.endswith": "^0.2.0",
-    "string.prototype.startswith": "^0.2.0",
-    "typedoc": "^0.20.28",
-    "typedoc-plugin-markdown": "^3.5.0",
-    "typescript": "^4.0.3"
+    "string.prototype.startswith": "^0.2.0"
   },
   "files": [
     "dist",
@@ -90,7 +86,7 @@
     ]
   },
   "volta": {
-    "node": "12.22.7",
-    "npm": "6.14.15"
+    "node": "14.20.0",
+    "npm": "6.14.17"
   }
 }
