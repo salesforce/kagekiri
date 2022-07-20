@@ -45,7 +45,7 @@
     "karma-mocha": "^2.0.1",
     "karma-rollup-preprocessor": "^7.0.5",
     "lint-staged": "^11.2.3",
-    "mocha": "^9.1.2",
+    "mocha": "^10.0.0",
     "object-assign": "^4.1.1",
     "postcss-selector-parser": "^6.0.3",
     "rimraf": "^3.0.2",
@@ -57,7 +57,7 @@
     "standard": "^16.0.4",
     "string.prototype.endswith": "^0.2.0",
     "string.prototype.startswith": "^0.2.0",
-    "typedoc": "^0.20.28",
+    "typedoc": "^0.23.8",
     "typedoc-plugin-markdown": "^3.5.0",
     "typescript": "^4.0.3"
   },
