@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-/* global Element Node */
+/* global Element */
 
 import 'string.prototype.startswith'
 import 'string.prototype.endswith'
@@ -15,19 +15,6 @@ import postcssSelectorParser from 'postcss-selector-parser'
 // This is ignored for code coverage because we don't run code coverage in IE.
 const nativeMatches = Element.prototype.matches || /* istanbul ignore next */ Element.prototype.msMatchesSelector
 
-const { ELEMENT_NODE, TEXT_NODE } = Node
-
-// See https://dom.spec.whatwg.org/#concept-slotable
-function containsSlottableNodes (nodes) {
-  for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i]
-    if (node.nodeType === ELEMENT_NODE || node.nodeType === TEXT_NODE) {
-      return true
-    }
-  }
-  return false
-}
-
 function getChildren (node) {
   if (node.documentElement) { // document, make sure <html> is the first "child"
     return [node.documentElement]
@@ -36,7 +23,8 @@ function getChildren (node) {
   } else if (typeof node.assignedElements === 'function') { // slot
     // If the slot has assigned slottable nodes (text or elements), then those
     // should be shown. Otherwise the (default) children should be shown.
-    return containsSlottableNodes(node.assignedNodes()) ? node.assignedElements() : node.children
+    // See https://dom.spec.whatwg.org/#concept-slotable
+    return node.assignedNodes().length ? node.assignedElements() : node.children
   } else { // regular element
     return node.children
   }

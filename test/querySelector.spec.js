@@ -1033,6 +1033,10 @@ describe('basic test suite', function () {
             classList: ['inner-element']
           }
         ]
+      },
+      {
+        selector: '.cdata .default',
+        expected: []
       }
     ])
   })
