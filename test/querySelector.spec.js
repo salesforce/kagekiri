@@ -49,6 +49,8 @@ import nestedSlotsLight7 from './fixtures/nestedSlots7/light.html'
 import nestedSlotsShadow7 from './fixtures/nestedSlots7/shadow.html'
 import unusualSelectorsLight1 from './fixtures/unusualSelectors1/light.html'
 import unusualSelectorsShadow1 from './fixtures/unusualSelectors1/shadow.html'
+import defaultSlotContentLight from './fixtures/defaultSlotContent/light.html'
+import defaultSlotContentShadow from './fixtures/defaultSlotContent/shadow.html'
 
 function testSelectors (lightDom, shadowDom, tests, { shadowOnly = false, lightOnly = false } = {}) {
   tests.forEach(({ selector, expected }) => {
@@ -994,5 +996,44 @@ describe('basic test suite', function () {
         expected: expectedAllShadow
       }
     ], { shadowOnly: true })
+  })
+
+  describe('default slot content', () => {
+    const defaultDiv = {
+      tagName: 'DIV',
+      classList: ['default']
+    }
+
+    testSelectors(defaultSlotContentLight, defaultSlotContentShadow, [
+      {
+        selector: '.empty .default',
+        expected: [
+          defaultDiv
+        ]
+      },
+      {
+        selector: '.text .default',
+        expected: []
+      },
+      {
+        selector: '.comment .default',
+        expected: [
+          defaultDiv
+        ]
+      },
+      {
+        selector: '.element .default',
+        expected: []
+      },
+      {
+        selector: '.element .inner-element',
+        expected: [
+          {
+            tagName: 'DIV',
+            classList: ['inner-element']
+          }
+        ]
+      }
+    ])
   })
 })
