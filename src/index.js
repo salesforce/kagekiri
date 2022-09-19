@@ -21,10 +21,10 @@ function getChildren (node) {
   } else if (node.shadowRoot) { // shadow host
     return node.shadowRoot.children
   } else if (typeof node.assignedElements === 'function') { // slot
-    // If the slot has assigned elements, then those
-    // should be shown. Otherwise the (default) children should be shown.
-    const assigned = node.assignedElements()
-    return assigned.length ? assigned : node.children
+    // If the slot has assigned slottable nodes (text or elements), then it is rendering
+    // those instead of the default content. Otherwise, return the default content.
+    // See: https://dom.spec.whatwg.org/#concept-slotable
+    return node.assignedNodes().length ? node.assignedElements() : node.children
   } else { // regular element
     return node.children
   }

@@ -1,0 +1,19 @@
+<!--
+  Copyright (c) 2020, salesforce.com, inc.
+  All rights reserved.
+  SPDX-License-Identifier: BSD-3-Clause
+  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<fancy-component class="empty"></fancy-component>
+<fancy-component class="text"> </fancy-component>
+<fancy-component class="comment"><!-- comment --></fancy-component>
+<fancy-component class="element"><div class="inner-element"></div></fancy-component>
+<script>
+  customElements.define('fancy-component', class extends HTMLElement {
+    constructor() {
+      super()
+      let shadowRoot = this.attachShadow({mode: 'open'});
+      shadowRoot.innerHTML = `<slot><div class="default">default content</div></slot>`
+    }
+  })
+</script>
