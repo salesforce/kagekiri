@@ -1,4 +1,4 @@
-kagekiri [![build status](https://circleci.com/gh/salesforce/kagekiri.svg?style=svg)](https://circleci.com/gh/salesforce/kagekiri)
+kagekiri
 ====
 
 Shadow DOM-piercing query APIs. Supports:
