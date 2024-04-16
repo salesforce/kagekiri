@@ -135,12 +135,21 @@ function matchesSelector (element, ast) {
       if (node.value === ' ') {
         // walk all ancestors
         const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
-        const ancestor = getFirstMatchingAncestor(element, precedingNodes)
+        let ancestor = getFirstMatchingAncestor(element, precedingNodes)
         if (!ancestor) {
           return false
         } else {
-          element = ancestor
-          i -= precedingNodes.length
+          // Eventhough first ancestor matches the selector, ancestor shall match all preceding nodes
+          while(ancestor){
+            // If this ancestor is compatible with the preceding nodes, then it is a match
+            // If not, walk up the ancestor tree until a match is found
+            if(matchesSelector(ancestor, { nodes: nodes.slice(0, i-precedingNodes.length) })){
+              break
+            }
+            ancestor = getFirstMatchingAncestor(ancestor, precedingNodes)
+          }
+          // If ancestor is undefined, it means while loop has exhausted all the possible ancestors and not found a match
+          return ancestor !== undefined
         }
       } else if (node.value === '>') {
         // walk immediate parent only
@@ -180,6 +189,9 @@ function getMatchingElements (elementIterator, ast, multiple) {
   const results = multiple ? [] : null
   let element
   while ((element = elementIterator.next())) {
+    if(element.classList.contains('templateInputs')){
+      debugger
+    }
     for (const node of ast.nodes) { // comma-separated selectors, e.g. .foo, .bar
       if (matchesSelector(element, node)) {
         if (multiple) {
@@ -314,8 +326,13 @@ function parse (selector) {
 }
 
 function query (selector, context, multiple) {
-  const ast = parse(selector)
+  // lets check with native query selector if the element is available in light dom
+  const element = context.querySelector(selector)
+  if(element && !multiple){
+    return element
+  }
 
+  const ast = parse(selector)
   const elementIterator = new ElementIterator(context)
   return getMatchingElements(elementIterator, ast, multiple)
 }
