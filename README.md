@@ -1,5 +1,5 @@
 kagekiri
-=====
+====
 
 Shadow DOM-piercing query APIs. Supports:
 
