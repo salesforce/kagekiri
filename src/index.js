@@ -323,12 +323,6 @@ function parse (selector) {
 }
 
 function query (selector, context, multiple) {
-  // lets check with native query selector if the element is available in light dom
-  const element = context.querySelector(selector)
-  if(element && !multiple){
-    return element
-  }
-
   const ast = parse(selector)
   const elementIterator = new ElementIterator(context)
   return getMatchingElements(elementIterator, ast, multiple)
