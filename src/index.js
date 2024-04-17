@@ -148,8 +148,8 @@ function matchesSelector (element, ast) {
             }
             ancestor = getFirstMatchingAncestor(ancestor, precedingNodes)
           }
-          // If ancestor is undefined, it means while loop has exhausted all the possible ancestors and not found a match
-          return ancestor !== undefined
+          // If ancestor is null/undefined, it means while loop has exhausted all the possible ancestors and not found a match
+          return ancestor != null
         }
       } else if (node.value === '>') {
         // walk immediate parent only
