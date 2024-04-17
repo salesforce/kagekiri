@@ -17,31 +17,36 @@ module.exports = function (config) {
       require('karma-mocha'),
       require('karma-chrome-launcher'),
       require('karma-firefox-launcher'),
-      require('karma-coverage')
+      ...(process.env.COVERAGE ? [require('karma-coverage')] : [])
     ],
 
-    reporters: ['progress', 'coverage'],
+    reporters: [
+      'progress',
+      ...(process.env.COVERAGE ? ['coverage'] : [])
+    ],
 
     preprocessors: {
       'test/**/*.spec.js': ['rollup']
     },
 
-    coverageReporter: {
-      dir: 'coverage',
-      reporters: [
-        { type: 'html', subdir: 'report-html' },
-        { type: 'lcov', subdir: 'report-lcov' },
-        { type: 'text', subdir: 'report-text' }
-      ],
-      check: {
-        global: {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100
+    ...(process.env.COVERAGE && {
+      coverageReporter: {
+        dir: 'coverage',
+        reporters: [
+          { type: 'html', subdir: 'report-html' },
+          { type: 'lcov', subdir: 'report-lcov' },
+          { type: 'text', subdir: 'report-text' }
+        ],
+        check: {
+          global: {
+            statements: 100,
+            branches: 100,
+            functions: 100,
+            lines: 100
+          }
         }
       }
-    },
+    }),
 
     rollupPreprocessor: {
       plugins: [
@@ -54,9 +59,11 @@ module.exports = function (config) {
         require('rollup-plugin-string').string({
           include: '**/*.html'
         }),
-        require('rollup-plugin-istanbul')({
-          exclude: ['**/test/**', '**/node_modules/**']
-        })
+        ...(process.env.COVERAGE
+          ? [require('rollup-plugin-istanbul')({
+              exclude: ['**/test/**', '**/node_modules/**']
+            })]
+          : [])
       ],
       output: {
         format: 'iife', // Helps prevent naming collisions.
