@@ -140,10 +140,10 @@ function matchesSelector (element, ast) {
           return false
         } else {
           // Eventhough first ancestor matches the selector, ancestor shall match all preceding nodes
-          while(ancestor){
+          while (ancestor) {
             // If this ancestor is compatible with the preceding nodes, then it is a match
             // If not, walk up the ancestor tree until a match is found
-            if(matchesSelector(ancestor, { nodes: nodes.slice(0, i-precedingNodes.length) })){
+            if (matchesSelector(ancestor, { nodes: nodes.slice(0, i - precedingNodes.length) })) {
               break
             }
             ancestor = getFirstMatchingAncestor(ancestor, precedingNodes)
