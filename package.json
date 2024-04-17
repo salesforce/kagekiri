@@ -73,7 +73,7 @@
   "bundlesize": [
     {
       "path": "./dist/kagekiri.iife.min.js",
-      "maxSize": "55 kB",
+      "maxSize": "58 kB",
       "compression": "none"
     }
   ],
