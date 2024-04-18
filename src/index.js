@@ -135,22 +135,22 @@ function matchesSelector (element, ast) {
       if (node.value === ' ') {
         // walk all ancestors
         const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
+        const prePrecedingNodes = nodes.slice(0, i - precedingNodes.length)
         let ancestor = getFirstMatchingAncestor(element, precedingNodes)
         if (!ancestor) {
           return false
-        } else {
-          // Eventhough first ancestor matches the selector, ancestor shall match all preceding nodes
-          while (ancestor) {
-            // If this ancestor is compatible with the preceding nodes, then it is a match
-            // If not, walk up the ancestor tree until a match is found
-            if (matchesSelector(ancestor, { nodes: nodes.slice(0, i - precedingNodes.length) })) {
-              break
-            }
-            ancestor = getFirstMatchingAncestor(ancestor, precedingNodes)
-          }
-          // If ancestor is null/undefined, it means while loop has exhausted all the possible ancestors and not found a match
-          return ancestor != null
         }
+        // Even though first ancestor matches the selector, ancestor should match all preceding nodes
+        while (ancestor) {
+          // If this ancestor is compatible with the preceding nodes, then it is a match
+          // If not, walk up the ancestor tree until a match is found
+          if (matchesSelector(ancestor, { nodes: prePrecedingNodes })) {
+            return true
+          }
+          ancestor = getFirstMatchingAncestor(ancestor, precedingNodes)
+        }
+        // While loop has exhausted all the possible ancestors and not found a match
+        return false
       } else if (node.value === '>') {
         // walk immediate parent only
         const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))

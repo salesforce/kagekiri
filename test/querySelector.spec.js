@@ -1044,7 +1044,7 @@ describe('basic test suite', function () {
   })
 })
 
-describe('ancestor selector', () => {
+describe('ancestor selector light', () => {
   const defaultDiv = {
     tagName: 'SELECT',
     classList: ['selectBox1']
@@ -1056,5 +1056,20 @@ describe('ancestor selector', () => {
         defaultDiv
       ]
     }
-  ])
+  ],  {lightOnly : true})
+})
+
+describe('ancestor selector shadow', () => {
+  const defaultDiv = {
+    tagName: 'SELECT',
+    classList: ['selectBox1']
+  }
+  testSelectors(ancestorLight1, ancestorShadow1, [
+    {
+      selector: 'outer-component > div:nth-child(1) .inner-component:nth-child(1) select',
+      expected: [
+        defaultDiv
+      ]
+    }
+  ],  {shadowOnly : true})
 })

@@ -12,13 +12,14 @@
         super()
         const shadowRoot = this.attachShadow({ mode: 'open' })
         shadowRoot.innerHTML = `
-        <div>
+        <div class="container">
+          <div></div>
         </div>
       `
       }
 
       connectedCallback() {
-        this.shadowRoot.querySelector('div').appendChild(new InnerComponent())
+        this.shadowRoot.querySelector('.container > div').appendChild(new InnerComponent())
       }
     }
 
@@ -27,20 +28,14 @@
         super()
         const shadowRoot = this.attachShadow({ mode: 'open' })
         shadowRoot.innerHTML = `
-        <div class="container">
-      <div>
         <div class="inner-component">
           <label></label>
           <select class="selectBox1"></select>
         </div>
-      </div>
-      <div>
         <div class="inner-component">
           <label></label>
           <select class="selectBox2"></select>
         </div>
-      </div>
-    </div>
             `;
       }
     }
