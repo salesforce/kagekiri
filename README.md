@@ -320,6 +320,12 @@ Debug:
 npm run test:debug
 ```
 
+Test with coverage:
+
+```sh
+npm run test:coverage
+```
+
 Lint:
 
 ```sh
