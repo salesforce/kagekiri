@@ -1044,7 +1044,7 @@ describe('basic test suite', function () {
   })
 })
 
-describe('ancestor selector light', () => {
+describe('ancestor selector', () => {
   const defaultDiv = {
     tagName: 'SELECT',
     classList: ['selectBox1']
