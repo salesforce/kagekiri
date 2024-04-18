@@ -1070,6 +1070,12 @@ describe('ancestor selector shadow', () => {
       expected: [
         defaultDiv
       ]
+    },
+    {
+      selector: "outer-component > div.container > div:nth-child(1) .selectBox1",
+      expected:[
+        defaultDiv
+      ]
     }
   ],  {shadowOnly : true})
 })
