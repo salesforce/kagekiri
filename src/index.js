@@ -134,23 +134,9 @@ function matchesSelector (element, ast) {
       /* istanbul ignore else */
       if (node.value === ' ') {
         // walk all ancestors
-        const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
-        const prePrecedingNodes = nodes.slice(0, i - precedingNodes.length)
-        let ancestor = getFirstMatchingAncestor(element, precedingNodes)
-        if (!ancestor) {
-          return false
-        }
-        // Even though first ancestor matches the selector, ancestor should match all preceding nodes
-        while (ancestor) {
-          // If this ancestor is compatible with the preceding nodes, then it is a match
-          // If not, walk up the ancestor tree until a match is found
-          if (matchesSelector(ancestor, { nodes: prePrecedingNodes })) {
-            return true
-          }
-          ancestor = getFirstMatchingAncestor(ancestor, precedingNodes)
-        }
-        // While loop has exhausted all the possible ancestors and not found a match
-        return false
+        const lastNonCombinatorNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
+        const nodesBeforeLastNonCombinatorNodes = nodes.slice(0, i - lastNonCombinatorNodes.length)
+        return evaluateAncestorTree(element, lastNonCombinatorNodes, nodesBeforeLastNonCombinatorNodes)
       } else if (node.value === '>') {
         // walk immediate parent only
         const precedingNodes = getLastNonCombinatorNodes(nodes.slice(0, i))
@@ -183,6 +169,35 @@ function matchesSelector (element, ast) {
     }
   }
   return true
+}
+
+/**
+ * Even though the first ancestor matches the selector, the ancestor should match all preceding nodes.
+ * For example, consider a tree like `body > div > div > div > button`.
+ * The selector `body > div button` should match the button, but it won't if we simply grab the first
+ * div that is an ancestor of the button. Instead, we have to keep walking up the tree, trying all divs, until
+ * we find one that matches the *previous selectors*, i.e. until we match the div that is the immediate
+ * child of the body.
+ * Note that this can get quite expensive, as it is an O(n^2) algorithm, but it is correct. Also, this algorithm
+ * only needs to be implemented for the space (`' '`) combinator - the `'>'` combinator only needs to
+ * look at the immediate parent, so it doesn't need to iterate through all possible matching ancestors.
+*/
+function evaluateAncestorTree (element, lastNonCombinatorNodes, nodesBeforeLastNonCombinatorNodes) {
+  let ancestor = getFirstMatchingAncestor(element, lastNonCombinatorNodes)
+  if (!ancestor) {
+    return false
+  }
+  // Even though first ancestor matches the selector, ancestor should match all preceding nodes
+  while (ancestor) {
+    // If this ancestor is compatible with the preceding nodes, then it is a match
+    // If not, walk up the ancestor tree until a match is found
+    if (matchesSelector(ancestor, { nodes: nodesBeforeLastNonCombinatorNodes })) {
+      return true
+    }
+    ancestor = getFirstMatchingAncestor(ancestor, lastNonCombinatorNodes)
+  }
+  // While loop has exhausted all the possible ancestors and not found a match
+  return false
 }
 
 function getMatchingElements (elementIterator, ast, multiple) {
