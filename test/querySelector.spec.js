@@ -51,6 +51,7 @@ import unusualSelectorsLight1 from './fixtures/unusualSelectors1/light.html'
 import unusualSelectorsShadow1 from './fixtures/unusualSelectors1/shadow.html'
 import defaultSlotContentLight from './fixtures/defaultSlotContent/light.html'
 import defaultSlotContentShadow from './fixtures/defaultSlotContent/shadow.html'
+import ancestorLight1 from './fixtures/ancestors1/light.html'
 
 function testSelectors (lightDom, shadowDom, tests, { shadowOnly = false, lightOnly = false } = {}) {
   tests.forEach(({ selector, expected }) => {
@@ -1040,4 +1041,40 @@ describe('basic test suite', function () {
       }
     ])
   })
+})
+
+describe('ancestor selector', () => {
+  const defaultSelect = {
+    tagName: 'SELECT',
+    classList: ['selectBox1']
+  }
+  testSelectors(ancestorLight1, ancestorLight1, [
+    {
+      selector: 'div.container > div:nth-child(1) select',
+      expected: [
+        defaultSelect
+      ]
+    },
+    {
+      selector: 'div.container > div:nth-child(1) div:nth-child(1) select',
+      expected: [
+        defaultSelect
+      ]
+    },
+    {
+      selector: 'body > div.container > div:nth-child(1) .selectBox1',
+      expected: [
+        defaultSelect
+      ]
+    },
+    {
+      selector: 'div.container2 > div:nth-child(1) select',
+      expected: [
+        {
+          tagName: 'SELECT',
+          classList: ['selectBox3']
+        }
+      ]
+    }
+  ])
 })
