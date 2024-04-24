@@ -9,7 +9,7 @@
     "test": "karma start --single-run",
     "test:coverage": "COVERAGE=1 karma start --single-run",
     "test:debug": "karma start --browsers=Chrome --single-run=false",
-    "test:bundlesize": "bundlesize",
+    "test:bundlesize": "node scripts/bundlesize.mjs",
     "build": "rollup -c",
     "prepare": "npm run build",
     "lint": "standard *.js {scripts,src,test}/**/*.js",
@@ -29,7 +29,6 @@
     "name": "Nolan Lawson"
   },
   "license": "BSD-3-Clause",
-  "dependencies": {},
   "//": [
     "karma-rollup-preprocessor is pinned due to a bug in 7.0.8: https://github.com/jlmakes/karma-rollup-preprocessor/issues/75"
   ],
@@ -39,7 +38,7 @@
     "@rollup/plugin-inject": "^4.0.4",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "assert": "^2.1.0",
-    "bundlesize": "^0.18.2",
+    "bytes": "^3.1.2",
     "husky": "^7.0.4",
     "karma": "^6.4.3",
     "karma-chrome-launcher": "^3.2.0",
@@ -59,7 +58,8 @@
     "rollup-plugin-terser": "^7.0.2",
     "standard": "^16.0.4",
     "string.prototype.endswith": "^0.2.0",
-    "string.prototype.startswith": "^0.2.0"
+    "string.prototype.startswith": "^0.2.0",
+    "terser": "^5.30.4"
   },
   "files": [
     "dist",
@@ -79,6 +79,11 @@
       "path": "./dist/kagekiri.iife.min.js",
       "maxSize": "58 kB",
       "compression": "none"
+    },
+    {
+      "path": "./dist/kagekiri.iife.min.js",
+      "maxSize": "15 kB",
+      "compression": "gzip"
     }
   ],
   "lint-staged": {
