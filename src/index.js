@@ -5,15 +5,7 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-/* global Element */
-
-import 'string.prototype.startswith'
-import 'string.prototype.endswith'
 import postcssSelectorParser from 'postcss-selector-parser'
-
-// IE11 does not have Element.prototype.matches, we can use msMatchesSelector.
-// This is ignored for code coverage because we don't run code coverage in IE.
-const nativeMatches = Element.prototype.matches || /* istanbul ignore next */ Element.prototype.msMatchesSelector
 
 function getChildren (node) {
   if (node.documentElement) { // document, make sure <html> is the first "child"
@@ -127,7 +119,7 @@ function matchesSelector (element, ast) {
     } else if (node.type === 'pseudo' || node.type === 'attribute') {
       // For pseudos and attributes, just use the native element matcher.
       // `sourceCode` comes from `attachSourceIfNecessary()`
-      if (!nativeMatches.call(element, node.sourceCode)) {
+      if (!element.matches(node.sourceCode)) {
         return false
       }
     } else if (node.type === 'combinator') {
