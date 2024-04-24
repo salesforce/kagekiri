@@ -1044,7 +1044,7 @@ describe('basic test suite', function () {
 })
 
 describe('ancestor selector', () => {
-  const defaultDiv = {
+  const defaultSelect = {
     tagName: 'SELECT',
     classList: ['selectBox1']
   }
@@ -1052,19 +1052,19 @@ describe('ancestor selector', () => {
     {
       selector: 'div.container > div:nth-child(1) select',
       expected: [
-        defaultDiv
+        defaultSelect
       ]
     },
     {
       selector: 'div.container > div:nth-child(1) div:nth-child(1) select',
       expected: [
-        defaultDiv
+        defaultSelect
       ]
     },
     {
       selector: 'body > div.container > div:nth-child(1) .selectBox1',
       expected: [
-        defaultDiv
+        defaultSelect
       ]
     },
     {
