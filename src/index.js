@@ -79,7 +79,7 @@ function getParent (element) {
     return element.parentElement
   }
   // if an element is inside the shadow DOM, break outside of it
-  const rootNode = element.getRootNode()
+  const rootNode = typeof element.getRootNode === 'function' ? element.getRootNode() : document
   /* istanbul ignore else */
   if (rootNode !== document) {
     return rootNode.host
