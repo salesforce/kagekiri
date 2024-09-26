@@ -7,7 +7,7 @@
 import nodeResolve from '@rollup/plugin-node-resolve'
 import cjs from '@rollup/plugin-commonjs'
 import globals from 'rollup-plugin-node-globals'
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser'
 
 // Note that postcss-selector-parser is bundled into all outputs because its deps (util.promisify)
 // cause problems depending on the consumer's bundler. We can make things simpler for consumers of
